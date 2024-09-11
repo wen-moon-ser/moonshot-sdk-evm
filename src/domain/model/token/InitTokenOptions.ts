@@ -1,0 +1,8 @@
+import { CurveType } from '@heliofi/launchpad-common';
+import { Moonshot } from '../moonshot';
+
+export interface InitTokenOptions {
+  mintAddress: string;
+  moonshot: Moonshot;
+  curveType?: CurveType.CONSTANT_PRODUCT_V1;
+}

@@ -1,0 +1,5 @@
+/src
+/.idea
+/node_modules
+/.npmrc
+/.yarnrc
