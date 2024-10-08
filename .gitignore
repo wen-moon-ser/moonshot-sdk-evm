@@ -42,3 +42,4 @@ coverage
 
 .npmrc
 .yarnrc
+.aider*
