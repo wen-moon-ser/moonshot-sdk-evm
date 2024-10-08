@@ -32,7 +32,8 @@
   },
   "dependencies": {
     "@heliofi/launchpad-common": "1.0.3",
-    "axios": "^1.7.7"
+    "axios": "^1.7.7",
+    "ethers": "^6.13.3"
   },
   "eslintConfig": {
     "root": true,
