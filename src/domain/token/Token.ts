@@ -9,6 +9,7 @@ import { ConstantProductCurveV1Adapter } from '../curve/ConstantProductCurveAdap
 import { AbstractCurveAdapter } from '../curve/AbstractCurveAdapter';
 import { getCurveAccount } from '../../evm/utils/getCurveAccount';
 import { InitTokenOptions } from './InitTokenOptions';
+import { FixedSide } from './FixedSide';
 
 export class Token extends Moonshot {
   private token: MoonShotToken;
@@ -54,20 +55,38 @@ export class Token extends Moonshot {
     let tx: ContractTransaction;
 
     if (options.tradeDirection == 'BUY') {
-      tx = await this.getFactory().buyExactOut.populateTransaction(
-        await this.token.getAddress(),
-        options.tokenAmount,
-        options.collateralAmount,
-        {
-          value: options.collateralAmount,
-        },
-      );
+      if (options.fixedSide == FixedSide.IN) {
+        tx = await this.getFactory().buyExactOut.populateTransaction(
+          await this.token.getAddress(),
+          options.tokenAmount,
+          options.collateralAmount,
+          {
+            value: options.collateralAmount,
+          },
+        );
+      } else {
+        tx = await this.getFactory().buyExactIn.populateTransaction(
+          await this.token.getAddress(),
+          options.tokenAmount,
+          {
+            value: options.collateralAmount,
+          },
+        );
+      }
     } else {
-      tx = await this.getFactory().sellExactIn.populateTransaction(
-        await this.token.getAddress(),
-        options.tokenAmount,
-        options.collateralAmount,
-      );
+      if (options.fixedSide == FixedSide.IN) {
+        tx = await this.getFactory().sellExactOut.populateTransaction(
+          await this.token.getAddress(),
+          options.tokenAmount,
+          options.collateralAmount,
+        );
+      } else {
+        tx = await this.getFactory().sellExactIn.populateTransaction(
+          await this.token.getAddress(),
+          options.tokenAmount,
+          options.collateralAmount,
+        );
+      }
     }
 
     return tx;
