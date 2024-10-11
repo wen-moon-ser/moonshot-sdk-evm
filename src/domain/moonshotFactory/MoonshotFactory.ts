@@ -3,19 +3,16 @@ import {
   MoonShotFactory,
   MoonShotToken__factory,
 } from '../../evm';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { BigNumberish, ethers, Wallet } from 'ethers';
 import { FixedSide } from '../token';
 
-export class MoonshotFactory {
+export class Moonshot {
   private factory: MoonShotFactory;
 
   private signerWithProvider: Wallet;
 
-  constructor(key: string, provider: ethers.Provider, factoryAddress: string) {
-    const signer = new ethers.Wallet(key);
-
-    this.signerWithProvider = signer.connect(provider);
+  constructor(signer: ethers.Wallet, factoryAddress: string) {
+    this.signerWithProvider = signer;
 
     this.factory = MoonShotFactory__factory.connect(
       factoryAddress,

@@ -345,10 +345,10 @@
   resolved "https://registry.yarnpkg.com/@eslint/js/-/js-8.56.0.tgz#ef20350fec605a7f7035a01764731b2de0f3782b"
   integrity sha512-gMsVel9D7f2HLkBma9VbtzZRehRogVRfbr++f06nL2vnCGCNlzOD+/MUov/F4p8myyAHspEhVobgjpX64q5m6A==
 
-"@heliofi/launchpad-common@1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@heliofi/launchpad-common/-/launchpad-common-1.0.3.tgz#4cf2bf27508d7cd81c567ec86fdcfc4914b28c7d"
-  integrity sha512-W9zDC6goUpEdM/JyGQaiin4x/tjsUj2ebnvMMV7gTf6ia1ofuuAW7X+InKiXpJLr2rEnbXsjqVatcB5Nz9iXqQ==
+"@heliofi/launchpad-common@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@heliofi/launchpad-common/-/launchpad-common-1.1.0.tgz#ae053a11459d97229e79b92db52ce997b884c063"
+  integrity sha512-xtwF0CXeh+2/NXpA4WuXOazQwGDm453Jgubr1MjNUDUxAwcyIZ6pd0TnKeF5el9ZMcqDFX2fa8NPE8+TPUnUZA==
   dependencies:
     "@solana/web3.js" "^1.91.8"
     bignumber.js "9.1.1"
