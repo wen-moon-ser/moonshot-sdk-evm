@@ -23,18 +23,21 @@ import type {
   TypedContractMethod,
 } from "../common";
 
-export declare namespace IMoonShotToken {
+export declare namespace IMoonshotToken {
   export type ConstructorParamsStruct = {
     name: string;
     symbol: string;
+    creator: AddressLike;
     totalSupply: BigNumberish;
     virtualTokenReserves: BigNumberish;
     virtualCollateralReserves: BigNumberish;
     feeBasisPoints: BigNumberish;
     dexFeeBasisPoints: BigNumberish;
     migrationFeeFixed: BigNumberish;
+    poolCreationFee: BigNumberish;
     mcLowerLimit: BigNumberish;
     mcUpperLimit: BigNumberish;
+    tokensMigrationThreshold: BigNumberish;
     treasury: AddressLike;
     uniV2Router: AddressLike;
     dexTreasury: AddressLike;
@@ -43,35 +46,41 @@ export declare namespace IMoonShotToken {
   export type ConstructorParamsStructOutput = [
     name: string,
     symbol: string,
+    creator: string,
     totalSupply: bigint,
     virtualTokenReserves: bigint,
     virtualCollateralReserves: bigint,
     feeBasisPoints: bigint,
     dexFeeBasisPoints: bigint,
     migrationFeeFixed: bigint,
+    poolCreationFee: bigint,
     mcLowerLimit: bigint,
     mcUpperLimit: bigint,
+    tokensMigrationThreshold: bigint,
     treasury: string,
     uniV2Router: string,
     dexTreasury: string
   ] & {
     name: string;
     symbol: string;
+    creator: string;
     totalSupply: bigint;
     virtualTokenReserves: bigint;
     virtualCollateralReserves: bigint;
     feeBasisPoints: bigint;
     dexFeeBasisPoints: bigint;
     migrationFeeFixed: bigint;
+    poolCreationFee: bigint;
     mcLowerLimit: bigint;
     mcUpperLimit: bigint;
+    tokensMigrationThreshold: bigint;
     treasury: string;
     uniV2Router: string;
     dexTreasury: string;
   };
 }
 
-export interface MoonShotTokenInterface extends Interface {
+export interface MoonshotTokenInterface extends Interface {
   getFunction(
     nameOrSignature:
       | "allowance"
@@ -81,6 +90,8 @@ export interface MoonShotTokenInterface extends Interface {
       | "burnFrom"
       | "buyExactIn"
       | "buyExactOut"
+      | "creator"
+      | "curveType"
       | "decimals"
       | "dexFeeBPS"
       | "dexTreasury"
@@ -89,16 +100,20 @@ export interface MoonShotTokenInterface extends Interface {
       | "fixedMigrationFee"
       | "getAmountInAndFee"
       | "getAmountOutAndFee"
+      | "getCurveProgressBps"
+      | "getMarketCap"
       | "initalTokenSupply"
       | "mcLowerLimit"
       | "mcUpperLimit"
       | "migrate"
       | "name"
       | "pair"
+      | "poolCreationFee"
       | "sellExactIn"
       | "sellExactOut"
       | "sendingToPairNotAllowed"
       | "symbol"
+      | "tokensMigrationThreshold"
       | "totalSupply"
       | "tradingStopped"
       | "transfer"
@@ -136,6 +151,8 @@ export interface MoonShotTokenInterface extends Interface {
     functionFragment: "buyExactOut",
     values: [BigNumberish, BigNumberish]
   ): string;
+  encodeFunctionData(functionFragment: "creator", values?: undefined): string;
+  encodeFunctionData(functionFragment: "curveType", values?: undefined): string;
   encodeFunctionData(functionFragment: "decimals", values?: undefined): string;
   encodeFunctionData(functionFragment: "dexFeeBPS", values?: undefined): string;
   encodeFunctionData(
@@ -157,6 +174,14 @@ export interface MoonShotTokenInterface extends Interface {
     values: [BigNumberish, BigNumberish, BigNumberish, boolean]
   ): string;
   encodeFunctionData(
+    functionFragment: "getCurveProgressBps",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getMarketCap",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "initalTokenSupply",
     values?: undefined
   ): string;
@@ -172,6 +197,10 @@ export interface MoonShotTokenInterface extends Interface {
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(functionFragment: "pair", values?: undefined): string;
   encodeFunctionData(
+    functionFragment: "poolCreationFee",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "sellExactIn",
     values: [BigNumberish, BigNumberish]
   ): string;
@@ -184,6 +213,10 @@ export interface MoonShotTokenInterface extends Interface {
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "tokensMigrationThreshold",
+    values?: undefined
+  ): string;
   encodeFunctionData(
     functionFragment: "totalSupply",
     values?: undefined
@@ -224,6 +257,8 @@ export interface MoonShotTokenInterface extends Interface {
     functionFragment: "buyExactOut",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "creator", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "curveType", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "dexFeeBPS", data: BytesLike): Result;
   decodeFunctionResult(
@@ -245,6 +280,14 @@ export interface MoonShotTokenInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "getCurveProgressBps",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getMarketCap",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "initalTokenSupply",
     data: BytesLike
   ): Result;
@@ -260,6 +303,10 @@ export interface MoonShotTokenInterface extends Interface {
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "pair", data: BytesLike): Result;
   decodeFunctionResult(
+    functionFragment: "poolCreationFee",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "sellExactIn",
     data: BytesLike
   ): Result;
@@ -272,6 +319,10 @@ export interface MoonShotTokenInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "tokensMigrationThreshold",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "totalSupply",
     data: BytesLike
@@ -336,11 +387,11 @@ export namespace TransferEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export interface MoonShotToken extends BaseContract {
-  connect(runner?: ContractRunner | null): MoonShotToken;
+export interface MoonshotToken extends BaseContract {
+  connect(runner?: ContractRunner | null): MoonshotToken;
   waitForDeployment(): Promise<this>;
 
-  interface: MoonShotTokenInterface;
+  interface: MoonshotTokenInterface;
 
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
@@ -425,6 +476,10 @@ export interface MoonShotToken extends BaseContract {
     "payable"
   >;
 
+  creator: TypedContractMethod<[], [string], "view">;
+
+  curveType: TypedContractMethod<[], [bigint], "view">;
+
   decimals: TypedContractMethod<[], [bigint], "view">;
 
   dexFeeBPS: TypedContractMethod<[], [bigint], "view">;
@@ -459,6 +514,10 @@ export interface MoonShotToken extends BaseContract {
     "view"
   >;
 
+  getCurveProgressBps: TypedContractMethod<[], [bigint], "view">;
+
+  getMarketCap: TypedContractMethod<[], [bigint], "view">;
+
   initalTokenSupply: TypedContractMethod<[], [bigint], "view">;
 
   mcLowerLimit: TypedContractMethod<[], [bigint], "view">;
@@ -471,7 +530,7 @@ export interface MoonShotToken extends BaseContract {
       [bigint, bigint, bigint] & {
         tokensToMigrate: bigint;
         tokensToBurn: bigint;
-        ethAmount: bigint;
+        collateralAmount: bigint;
       }
     ],
     "nonpayable"
@@ -480,6 +539,8 @@ export interface MoonShotToken extends BaseContract {
   name: TypedContractMethod<[], [string], "view">;
 
   pair: TypedContractMethod<[], [string], "view">;
+
+  poolCreationFee: TypedContractMethod<[], [bigint], "view">;
 
   sellExactIn: TypedContractMethod<
     [_tokenAmount: BigNumberish, _amountCollateralMin: BigNumberish],
@@ -509,6 +570,8 @@ export interface MoonShotToken extends BaseContract {
   sendingToPairNotAllowed: TypedContractMethod<[], [boolean], "view">;
 
   symbol: TypedContractMethod<[], [string], "view">;
+
+  tokensMigrationThreshold: TypedContractMethod<[], [bigint], "view">;
 
   totalSupply: TypedContractMethod<[], [bigint], "view">;
 
@@ -592,6 +655,12 @@ export interface MoonShotToken extends BaseContract {
     "payable"
   >;
   getFunction(
+    nameOrSignature: "creator"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "curveType"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
     nameOrSignature: "decimals"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
@@ -634,6 +703,12 @@ export interface MoonShotToken extends BaseContract {
     "view"
   >;
   getFunction(
+    nameOrSignature: "getCurveProgressBps"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "getMarketCap"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
     nameOrSignature: "initalTokenSupply"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
@@ -650,7 +725,7 @@ export interface MoonShotToken extends BaseContract {
       [bigint, bigint, bigint] & {
         tokensToMigrate: bigint;
         tokensToBurn: bigint;
-        ethAmount: bigint;
+        collateralAmount: bigint;
       }
     ],
     "nonpayable"
@@ -661,6 +736,9 @@ export interface MoonShotToken extends BaseContract {
   getFunction(
     nameOrSignature: "pair"
   ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "poolCreationFee"
+  ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "sellExactIn"
   ): TypedContractMethod<
@@ -694,6 +772,9 @@ export interface MoonShotToken extends BaseContract {
   getFunction(
     nameOrSignature: "symbol"
   ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "tokensMigrationThreshold"
+  ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "totalSupply"
   ): TypedContractMethod<[], [bigint], "view">;

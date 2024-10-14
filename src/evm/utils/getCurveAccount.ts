@@ -1,10 +1,10 @@
 import { CurveAccount } from '../../domain';
-import { MoonShotToken } from '../typechain-types';
+import { MoonshotToken } from '../typechain-types';
 import { ContractCurveType } from '@heliofi/launchpad-common';
 import { ContractCurrency } from '../../domain/curve/ContractCurrency';
 
 export async function getCurveAccount(
-  token: MoonShotToken,
+  token: MoonshotToken,
 ): Promise<CurveAccount> {
   const totalSupply = await token.totalSupply();
   const curveAmount = await token.balanceOf(await token.getAddress());

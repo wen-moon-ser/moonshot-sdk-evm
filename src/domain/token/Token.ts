@@ -1,29 +1,72 @@
-import { ContractTransaction } from 'ethers';
-import { Moonshot } from '../moonshotFactory';
-import { MoonShotToken, MoonShotToken__factory } from '../../evm';
+import { ContractTransaction, ethers } from 'ethers';
+import {
+  MoonshotFactory,
+  MoonshotToken,
+  MoonshotToken__factory,
+} from '../../evm';
 import { CurveAccount } from '../curve/CurveAccount';
-import { GetTokenAmountOptions } from './GetTokenAmountOptions';
-import { GetCollateralAmountOptions } from './GetCollateralAmountOptions';
+import {
+  GetTokenAmountOptions,
+  GetTokenAmountOptionsSync,
+} from './GetTokenAmountOptions';
+import {
+  GetCollateralAmountOptions,
+  GetCollateralAmountOptionsSync,
+} from './GetCollateralAmountOptions';
 import { PrepareTxOptions } from './PrepareTxOptions';
 import { ConstantProductCurveV1Adapter } from '../curve/ConstantProductCurveAdapter';
 import { AbstractCurveAdapter } from '../curve/AbstractCurveAdapter';
 import { getCurveAccount } from '../../evm/utils/getCurveAccount';
 import { InitTokenOptions } from './InitTokenOptions';
 import { FixedSide } from './FixedSide';
+import { CurveType } from '../curve';
 
-export class Token extends Moonshot {
-  private token: MoonShotToken;
+export class Token {
+  private tokenAddress: string;
+
+  private token: MoonshotToken;
+
+  private factory: MoonshotFactory;
 
   private tokenCurveAdapter: AbstractCurveAdapter;
 
-  constructor(options: InitTokenOptions) {
-    super(options.signer, options.factoryAddress);
+  constructor(
+    token: MoonshotToken,
+    factory: MoonshotFactory,
+    tokenCurveAdapter: AbstractCurveAdapter,
+    tokenAddress: string,
+  ) {
+    this.token = token;
+    this.factory = factory;
+    this.tokenCurveAdapter = tokenCurveAdapter;
+    this.tokenAddress = tokenAddress;
+  }
 
-    this.token = MoonShotToken__factory.connect(
+  static async create(options: InitTokenOptions): Promise<Token> {
+    const token = MoonshotToken__factory.connect(
       options.tokenAddress,
       options.signer,
     );
-    this.tokenCurveAdapter = new ConstantProductCurveV1Adapter(this.token);
+    const tokenCurveAdapterType = await token.curveType();
+
+    let tokenCurveAdapter: AbstractCurveAdapter;
+    if (
+      tokenCurveAdapterType.toString() ==
+      CurveType.ConstantProductCurveV1.toString()
+    ) {
+      tokenCurveAdapter = new ConstantProductCurveV1Adapter(token);
+    } else {
+      throw new Error('Unsupported curve type');
+    }
+
+    ethers.Wallet.createRandom();
+
+    return new Token(
+      token,
+      options.factory,
+      tokenCurveAdapter,
+      await token.getAddress(),
+    );
   }
 
   curveAdapter(): AbstractCurveAdapter {
@@ -51,13 +94,23 @@ export class Token extends Moonshot {
     return this.tokenCurveAdapter.getTokenAmountByCollateral(options);
   }
 
+  getCollateralAmountByTokensSync(
+    options: GetCollateralAmountOptionsSync,
+  ): bigint {
+    return this.tokenCurveAdapter.getCollateralAmountByTokensSync(options);
+  }
+
+  getTokenAmountByCollateralSync(options: GetTokenAmountOptionsSync): bigint {
+    return this.tokenCurveAdapter.getTokenAmountByCollateralSync(options);
+  }
+
   async prepareTx(options: PrepareTxOptions): Promise<ContractTransaction> {
     let tx: ContractTransaction;
 
     if (options.tradeDirection == 'BUY') {
       if (options.fixedSide == FixedSide.IN) {
-        tx = await this.getFactory().buyExactOut.populateTransaction(
-          await this.token.getAddress(),
+        tx = await this.factory.buyExactOut.populateTransaction(
+          this.tokenAddress,
           options.tokenAmount,
           options.collateralAmount,
           {
@@ -65,8 +118,8 @@ export class Token extends Moonshot {
           },
         );
       } else {
-        tx = await this.getFactory().buyExactIn.populateTransaction(
-          await this.token.getAddress(),
+        tx = await this.factory.buyExactIn.populateTransaction(
+          this.tokenAddress,
           options.tokenAmount,
           {
             value: options.collateralAmount,
@@ -75,14 +128,14 @@ export class Token extends Moonshot {
       }
     } else {
       if (options.fixedSide == FixedSide.IN) {
-        tx = await this.getFactory().sellExactOut.populateTransaction(
-          await this.token.getAddress(),
+        tx = await this.factory.sellExactOut.populateTransaction(
+          this.tokenAddress,
           options.tokenAmount,
           options.collateralAmount,
         );
       } else {
-        tx = await this.getFactory().sellExactIn.populateTransaction(
-          await this.token.getAddress(),
+        tx = await this.factory.sellExactIn.populateTransaction(
+          this.tokenAddress,
           options.tokenAmount,
           options.collateralAmount,
         );

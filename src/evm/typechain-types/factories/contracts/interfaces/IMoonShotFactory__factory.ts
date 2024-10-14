@@ -4,9 +4,9 @@
 
 import { Contract, Interface, type ContractRunner } from "ethers";
 import type {
-  IMoonShotFactory,
-  IMoonShotFactoryInterface,
-} from "../../../contracts/interfaces/IMoonShotFactory";
+  IMoonshotFactory,
+  IMoonshotFactoryInterface,
+} from "../../../contracts/interfaces/IMoonshotFactory";
 
 const _abi = [
   {
@@ -53,13 +53,13 @@ const _abi = [
       {
         indexed: false,
         internalType: "uint256",
-        name: "contractTokenBalance",
+        name: "curvePositionAfterTrade",
         type: "uint256",
       },
       {
         indexed: false,
         internalType: "uint256",
-        name: "ethAmount",
+        name: "collateralAmount",
         type: "uint256",
       },
       {
@@ -72,6 +72,12 @@ const _abi = [
         indexed: false,
         internalType: "uint256",
         name: "dexFee",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "curveProgressBps",
         type: "uint256",
       },
     ],
@@ -102,13 +108,13 @@ const _abi = [
       {
         indexed: false,
         internalType: "uint256",
-        name: "contractTokenBalance",
+        name: "curvePositionAfterTrade",
         type: "uint256",
       },
       {
         indexed: false,
         internalType: "uint256",
-        name: "ethAmount",
+        name: "collateralAmount",
         type: "uint256",
       },
       {
@@ -127,6 +133,12 @@ const _abi = [
         indexed: false,
         internalType: "uint256",
         name: "dexFee",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "curveProgressBps",
         type: "uint256",
       },
     ],
@@ -170,7 +182,7 @@ const _abi = [
       {
         indexed: false,
         internalType: "uint256",
-        name: "ethToMigrate",
+        name: "collateralToMigrate",
         type: "uint256",
       },
       {
@@ -200,12 +212,18 @@ const _abi = [
       },
       {
         indexed: false,
+        internalType: "address",
+        name: "creator",
+        type: "address",
+      },
+      {
+        indexed: false,
         internalType: "bytes",
         name: "signature",
         type: "bytes",
       },
     ],
-    name: "NewMoonShotToken",
+    name: "NewMoonshotToken",
     type: "event",
   },
   {
@@ -215,6 +233,12 @@ const _abi = [
         indexed: false,
         internalType: "address",
         name: "addr",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "address",
+        name: "creator",
         type: "address",
       },
       {
@@ -232,7 +256,7 @@ const _abi = [
       {
         indexed: false,
         internalType: "uint256",
-        name: "ethAmount",
+        name: "collateralAmount",
         type: "uint256",
       },
       {
@@ -247,8 +271,14 @@ const _abi = [
         name: "dexFee",
         type: "uint256",
       },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "curveProgressBps",
+        type: "uint256",
+      },
     ],
-    name: "NewMoonShotTokenAndBuy",
+    name: "NewMoonshotTokenAndBuy",
     type: "event",
   },
   {
@@ -275,13 +305,13 @@ const _abi = [
       {
         indexed: false,
         internalType: "uint256",
-        name: "contractTokenBalance",
+        name: "curvePositionAfterTrade",
         type: "uint256",
       },
       {
         indexed: false,
         internalType: "uint256",
-        name: "ethAmount",
+        name: "collateralAmount",
         type: "uint256",
       },
       {
@@ -294,6 +324,12 @@ const _abi = [
         indexed: false,
         internalType: "uint256",
         name: "dexFee",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "curveProgressBps",
         type: "uint256",
       },
     ],
@@ -324,13 +360,13 @@ const _abi = [
       {
         indexed: false,
         internalType: "uint256",
-        name: "contractTokenBalance",
+        name: "curvePositionAfterTrade",
         type: "uint256",
       },
       {
         indexed: false,
         internalType: "uint256",
-        name: "ethAmount",
+        name: "collateralAmount",
         type: "uint256",
       },
       {
@@ -343,6 +379,12 @@ const _abi = [
         indexed: false,
         internalType: "uint256",
         name: "dexFee",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "curveProgressBps",
         type: "uint256",
       },
     ],
@@ -391,6 +433,12 @@ const _abi = [
       {
         indexed: false,
         internalType: "uint256",
+        name: "poolCreationFee",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
         name: "mcUpperLimit",
         type: "uint256",
       },
@@ -398,6 +446,12 @@ const _abi = [
         indexed: false,
         internalType: "uint256",
         name: "mcLowerLimit",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "tokensMigrationThreshold",
         type: "uint256",
       },
       {
@@ -492,7 +546,7 @@ const _abi = [
         type: "bytes",
       },
     ],
-    name: "createMoonShotToken",
+    name: "createMoonshotToken",
     outputs: [
       {
         internalType: "address",
@@ -531,7 +585,7 @@ const _abi = [
         type: "bytes",
       },
     ],
-    name: "createMoonShotTokenAndBuy",
+    name: "createMoonshotTokenAndBuy",
     outputs: [
       {
         internalType: "address",
@@ -622,12 +676,22 @@ const _abi = [
       },
       {
         internalType: "uint256",
+        name: "_poolCreationFee",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
         name: "_mcUpperLimit",
         type: "uint256",
       },
       {
         internalType: "uint256",
         name: "_mcLowerLimit",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_tokensMigrationThreshold",
         type: "uint256",
       },
       {
@@ -658,15 +722,15 @@ const _abi = [
   },
 ] as const;
 
-export class IMoonShotFactory__factory {
+export class IMoonshotFactory__factory {
   static readonly abi = _abi;
-  static createInterface(): IMoonShotFactoryInterface {
-    return new Interface(_abi) as IMoonShotFactoryInterface;
+  static createInterface(): IMoonshotFactoryInterface {
+    return new Interface(_abi) as IMoonshotFactoryInterface;
   }
   static connect(
     address: string,
     runner?: ContractRunner | null
-  ): IMoonShotFactory {
-    return new Contract(address, _abi, runner) as unknown as IMoonShotFactory;
+  ): IMoonshotFactory {
+    return new Contract(address, _abi, runner) as unknown as IMoonshotFactory;
   }
 }

@@ -1,20 +1,21 @@
 import {
-  MoonShotFactory__factory,
-  MoonShotFactory,
-  MoonShotToken__factory,
+  MoonshotFactory,
+  MoonshotFactory__factory,
+  MoonshotToken__factory,
 } from '../../evm';
 import { BigNumberish, ethers, Wallet } from 'ethers';
 import { FixedSide } from '../token';
+import { AmountAndFee } from './AmountAndFee';
 
 export class Moonshot {
-  private factory: MoonShotFactory;
+  private factory: MoonshotFactory;
 
   private signerWithProvider: Wallet;
 
   constructor(signer: ethers.Wallet, factoryAddress: string) {
     this.signerWithProvider = signer;
 
-    this.factory = MoonShotFactory__factory.connect(
+    this.factory = MoonshotFactory__factory.connect(
       factoryAddress,
       this.signerWithProvider,
     );
@@ -24,8 +25,8 @@ export class Moonshot {
     tokenAddress: string,
     tokenAmount: BigNumberish,
     maxCollateralAmount: BigNumberish,
-  ): Promise<void> {
-    await this.factory.buyExactOut(
+  ): Promise<ethers.ContractTransactionResponse> {
+    return this.factory.buyExactOut(
       tokenAddress,
       tokenAmount,
       maxCollateralAmount,
@@ -35,16 +36,16 @@ export class Moonshot {
   async buyExactIn(
     tokenAddress: string,
     amountOutMin: BigNumberish,
-  ): Promise<void> {
-    await this.factory.buyExactIn(tokenAddress, amountOutMin);
+  ): Promise<ethers.ContractTransactionResponse> {
+    return this.factory.buyExactIn(tokenAddress, amountOutMin);
   }
 
   async sellExactOut(
     tokenAddress: string,
     tokenAmount: BigNumberish,
     maxCollateralAmount: BigNumberish,
-  ): Promise<void> {
-    await this.factory.sellExactOut(
+  ): Promise<ethers.ContractTransactionResponse> {
+    return this.factory.sellExactOut(
       tokenAddress,
       tokenAmount,
       maxCollateralAmount,
@@ -55,8 +56,8 @@ export class Moonshot {
     tokenAddress: string,
     tokenAmount: BigNumberish,
     maxCollateralAmount: BigNumberish,
-  ): Promise<void> {
-    await this.factory.sellExactIn(
+  ): Promise<ethers.ContractTransactionResponse> {
+    return this.factory.sellExactIn(
       tokenAddress,
       tokenAmount,
       maxCollateralAmount,
@@ -64,7 +65,7 @@ export class Moonshot {
   }
 
   async getCurvePosition(tokenAddress: string): Promise<bigint> {
-    const token = MoonShotToken__factory.connect(
+    const token = MoonshotToken__factory.connect(
       tokenAddress,
       this.signerWithProvider,
     );
@@ -76,8 +77,8 @@ export class Moonshot {
     tokenAddress: string,
     amountIn: bigint,
     paymentToken: FixedSide,
-  ): Promise<[bigint, bigint]> {
-    const token = MoonShotToken__factory.connect(
+  ): Promise<AmountAndFee> {
+    const token = MoonshotToken__factory.connect(
       tokenAddress,
       this.signerWithProvider,
     );
@@ -100,15 +101,18 @@ export class Moonshot {
       paymentToken == FixedSide.IN,
     );
 
-    return [amountOut, fee];
+    return {
+      amount: amountOut,
+      fee,
+    };
   }
 
   async getAmountInAndFee(
     tokenAddress: string,
     amountOut: bigint,
     paymentToken: FixedSide,
-  ): Promise<[bigint, bigint]> {
-    const token = MoonShotToken__factory.connect(
+  ): Promise<AmountAndFee> {
+    const token = MoonshotToken__factory.connect(
       tokenAddress,
       this.signerWithProvider,
     );
@@ -131,10 +135,13 @@ export class Moonshot {
       paymentToken == FixedSide.OUT,
     );
 
-    return [amountIn, fee];
+    return {
+      amount: amountIn,
+      fee,
+    };
   }
 
-  getFactory(): MoonShotFactory {
+  getFactory(): MoonshotFactory {
     return this.factory;
   }
 }

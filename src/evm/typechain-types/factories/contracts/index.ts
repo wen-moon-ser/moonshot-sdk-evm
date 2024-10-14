@@ -2,5 +2,5 @@
 /* tslint:disable */
 /* eslint-disable */
 export * as interfaces from "./interfaces";
-export { MoonShotFactory__factory } from "./MoonShotFactory__factory";
-export { MoonShotToken__factory } from "./MoonShotToken__factory";
+export { MoonshotFactory__factory } from "./MoonshotFactory__factory";
+export { MoonshotToken__factory } from "./MoonshotToken__factory";

@@ -4,9 +4,9 @@
 
 import { Contract, Interface, type ContractRunner } from "ethers";
 import type {
-  IMoonShotToken,
-  IMoonShotTokenInterface,
-} from "../../../contracts/interfaces/IMoonShotToken";
+  IMoonshotToken,
+  IMoonshotTokenInterface,
+} from "../../../contracts/interfaces/IMoonshotToken";
 
 const _abi = [
   {
@@ -314,6 +314,32 @@ const _abi = [
   },
   {
     inputs: [],
+    name: "getCurveProgressBps",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getMarketCap",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "migrate",
     outputs: [
       {
@@ -328,7 +354,7 @@ const _abi = [
       },
       {
         internalType: "uint256",
-        name: "ethAmount",
+        name: "collateralAmount",
         type: "uint256",
       },
     ],
@@ -476,15 +502,15 @@ const _abi = [
   },
 ] as const;
 
-export class IMoonShotToken__factory {
+export class IMoonshotToken__factory {
   static readonly abi = _abi;
-  static createInterface(): IMoonShotTokenInterface {
-    return new Interface(_abi) as IMoonShotTokenInterface;
+  static createInterface(): IMoonshotTokenInterface {
+    return new Interface(_abi) as IMoonshotTokenInterface;
   }
   static connect(
     address: string,
     runner?: ContractRunner | null
-  ): IMoonShotToken {
-    return new Contract(address, _abi, runner) as unknown as IMoonShotToken;
+  ): IMoonshotToken {
+    return new Contract(address, _abi, runner) as unknown as IMoonshotToken;
   }
 }

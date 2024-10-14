@@ -3,5 +3,5 @@
 /* eslint-disable */
 import type * as interfaces from "./interfaces";
 export type { interfaces };
-export type { MoonShotFactory } from "./MoonShotFactory";
-export type { MoonShotToken } from "./MoonShotToken";
+export type { MoonshotFactory } from "./MoonshotFactory";
+export type { MoonshotToken } from "./MoonshotToken";

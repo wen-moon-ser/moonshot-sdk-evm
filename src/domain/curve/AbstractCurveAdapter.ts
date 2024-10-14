@@ -1,11 +1,16 @@
-import { MoonShotToken } from '../../evm';
-import { GetCollateralAmountOptions, GetTokenAmountOptions } from '../token';
+import { MoonshotToken } from '../../evm';
+import {
+  GetCollateralAmountOptions,
+  GetCollateralAmountOptionsSync,
+  GetTokenAmountOptions,
+  GetTokenAmountOptionsSync,
+} from '../token';
 import { CurveAccount } from './CurveAccount';
 import { getCurveAccount } from '../../evm/utils/getCurveAccount';
 import { calculateCurvePosition } from '../../evm/utils/calculateCurvePosition';
 
 export abstract class AbstractCurveAdapter {
-  constructor(protected token: MoonShotToken) {}
+  constructor(protected token: MoonshotToken) {}
 
   abstract getCollateralAmountByTokens(
     options: GetCollateralAmountOptions,
@@ -27,4 +32,12 @@ export abstract class AbstractCurveAdapter {
       curveState.curveAmount,
     );
   }
+
+  abstract getCollateralAmountByTokensSync(
+    options: GetCollateralAmountOptionsSync,
+  ): bigint;
+
+  abstract getTokenAmountByCollateralSync(
+    options: GetTokenAmountOptionsSync,
+  ): bigint;
 }

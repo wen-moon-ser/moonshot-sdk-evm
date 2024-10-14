@@ -66,13 +66,13 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Strings__factory>;
     getContractFactory(
-      name: "IMoonShotFactory",
+      name: "IMoonshotFactory",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IMoonShotFactory__factory>;
+    ): Promise<Contracts.IMoonshotFactory__factory>;
     getContractFactory(
-      name: "IMoonShotToken",
+      name: "IMoonshotToken",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IMoonShotToken__factory>;
+    ): Promise<Contracts.IMoonshotToken__factory>;
     getContractFactory(
       name: "IUniswapV2Factory",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -82,13 +82,13 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IUniswapV2Router02__factory>;
     getContractFactory(
-      name: "MoonShotFactory",
+      name: "MoonshotFactory",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.MoonShotFactory__factory>;
+    ): Promise<Contracts.MoonshotFactory__factory>;
     getContractFactory(
-      name: "MoonShotToken",
+      name: "MoonshotToken",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.MoonShotToken__factory>;
+    ): Promise<Contracts.MoonshotToken__factory>;
 
     getContractAt(
       name: "Ownable",
@@ -156,15 +156,15 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.Strings>;
     getContractAt(
-      name: "IMoonShotFactory",
+      name: "IMoonshotFactory",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
-    ): Promise<Contracts.IMoonShotFactory>;
+    ): Promise<Contracts.IMoonshotFactory>;
     getContractAt(
-      name: "IMoonShotToken",
+      name: "IMoonshotToken",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
-    ): Promise<Contracts.IMoonShotToken>;
+    ): Promise<Contracts.IMoonshotToken>;
     getContractAt(
       name: "IUniswapV2Factory",
       address: string | ethers.Addressable,
@@ -176,15 +176,15 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.IUniswapV2Router02>;
     getContractAt(
-      name: "MoonShotFactory",
+      name: "MoonshotFactory",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
-    ): Promise<Contracts.MoonShotFactory>;
+    ): Promise<Contracts.MoonshotFactory>;
     getContractAt(
-      name: "MoonShotToken",
+      name: "MoonshotToken",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
-    ): Promise<Contracts.MoonShotToken>;
+    ): Promise<Contracts.MoonshotToken>;
 
     deployContract(
       name: "Ownable",
@@ -239,13 +239,13 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.Strings>;
     deployContract(
-      name: "IMoonShotFactory",
+      name: "IMoonshotFactory",
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IMoonShotFactory>;
+    ): Promise<Contracts.IMoonshotFactory>;
     deployContract(
-      name: "IMoonShotToken",
+      name: "IMoonshotToken",
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IMoonShotToken>;
+    ): Promise<Contracts.IMoonshotToken>;
     deployContract(
       name: "IUniswapV2Factory",
       signerOrOptions?: ethers.Signer | DeployContractOptions
@@ -255,13 +255,13 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.IUniswapV2Router02>;
     deployContract(
-      name: "MoonShotFactory",
+      name: "MoonshotFactory",
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.MoonShotFactory>;
+    ): Promise<Contracts.MoonshotFactory>;
     deployContract(
-      name: "MoonShotToken",
+      name: "MoonshotToken",
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.MoonShotToken>;
+    ): Promise<Contracts.MoonshotToken>;
 
     deployContract(
       name: "Ownable",
@@ -329,15 +329,15 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.Strings>;
     deployContract(
-      name: "IMoonShotFactory",
+      name: "IMoonshotFactory",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IMoonShotFactory>;
+    ): Promise<Contracts.IMoonshotFactory>;
     deployContract(
-      name: "IMoonShotToken",
+      name: "IMoonshotToken",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IMoonShotToken>;
+    ): Promise<Contracts.IMoonshotToken>;
     deployContract(
       name: "IUniswapV2Factory",
       args: any[],
@@ -349,15 +349,15 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.IUniswapV2Router02>;
     deployContract(
-      name: "MoonShotFactory",
+      name: "MoonshotFactory",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.MoonShotFactory>;
+    ): Promise<Contracts.MoonshotFactory>;
     deployContract(
-      name: "MoonShotToken",
+      name: "MoonshotToken",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.MoonShotToken>;
+    ): Promise<Contracts.MoonshotToken>;
 
     // default types
     getContractFactory(

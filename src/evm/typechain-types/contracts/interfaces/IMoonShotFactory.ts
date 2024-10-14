@@ -23,13 +23,13 @@ import type {
   TypedContractMethod,
 } from "../../common";
 
-export interface IMoonShotFactoryInterface extends Interface {
+export interface IMoonshotFactoryInterface extends Interface {
   getFunction(
     nameOrSignature:
       | "buyExactIn"
       | "buyExactOut"
-      | "createMoonShotToken"
-      | "createMoonShotTokenAndBuy"
+      | "createMoonshotToken"
+      | "createMoonshotTokenAndBuy"
       | "sellExactIn"
       | "sellExactOut"
       | "setConfig"
@@ -41,8 +41,8 @@ export interface IMoonShotFactoryInterface extends Interface {
       | "BuyExactOut"
       | "MarketcapReached"
       | "Migrated"
-      | "NewMoonShotToken"
-      | "NewMoonShotTokenAndBuy"
+      | "NewMoonshotToken"
+      | "NewMoonshotTokenAndBuy"
       | "SellExactIn"
       | "SellExactOut"
       | "SetConfig"
@@ -57,11 +57,11 @@ export interface IMoonShotFactoryInterface extends Interface {
     values: [AddressLike, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "createMoonShotToken",
+    functionFragment: "createMoonshotToken",
     values: [string, string, BigNumberish, BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "createMoonShotTokenAndBuy",
+    functionFragment: "createMoonshotTokenAndBuy",
     values: [string, string, BigNumberish, BigNumberish, BytesLike]
   ): string;
   encodeFunctionData(
@@ -83,6 +83,8 @@ export interface IMoonShotFactoryInterface extends Interface {
       BigNumberish,
       BigNumberish,
       BigNumberish,
+      BigNumberish,
+      BigNumberish,
       AddressLike,
       AddressLike,
       AddressLike,
@@ -96,11 +98,11 @@ export interface IMoonShotFactoryInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "createMoonShotToken",
+    functionFragment: "createMoonshotToken",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "createMoonShotTokenAndBuy",
+    functionFragment: "createMoonshotTokenAndBuy",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -119,28 +121,31 @@ export namespace BuyExactInEvent {
     buyer: AddressLike,
     token: AddressLike,
     tokenAmount: BigNumberish,
-    contractTokenBalance: BigNumberish,
-    ethAmount: BigNumberish,
+    curvePositionAfterTrade: BigNumberish,
+    collateralAmount: BigNumberish,
     fee: BigNumberish,
-    dexFee: BigNumberish
+    dexFee: BigNumberish,
+    curveProgressBps: BigNumberish
   ];
   export type OutputTuple = [
     buyer: string,
     token: string,
     tokenAmount: bigint,
-    contractTokenBalance: bigint,
-    ethAmount: bigint,
+    curvePositionAfterTrade: bigint,
+    collateralAmount: bigint,
     fee: bigint,
-    dexFee: bigint
+    dexFee: bigint,
+    curveProgressBps: bigint
   ];
   export interface OutputObject {
     buyer: string;
     token: string;
     tokenAmount: bigint;
-    contractTokenBalance: bigint;
-    ethAmount: bigint;
+    curvePositionAfterTrade: bigint;
+    collateralAmount: bigint;
     fee: bigint;
     dexFee: bigint;
+    curveProgressBps: bigint;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -153,31 +158,34 @@ export namespace BuyExactOutEvent {
     buyer: AddressLike,
     token: AddressLike,
     tokenAmount: BigNumberish,
-    contractTokenBalance: BigNumberish,
-    ethAmount: BigNumberish,
+    curvePositionAfterTrade: BigNumberish,
+    collateralAmount: BigNumberish,
     refund: BigNumberish,
     fee: BigNumberish,
-    dexFee: BigNumberish
+    dexFee: BigNumberish,
+    curveProgressBps: BigNumberish
   ];
   export type OutputTuple = [
     buyer: string,
     token: string,
     tokenAmount: bigint,
-    contractTokenBalance: bigint,
-    ethAmount: bigint,
+    curvePositionAfterTrade: bigint,
+    collateralAmount: bigint,
     refund: bigint,
     fee: bigint,
-    dexFee: bigint
+    dexFee: bigint,
+    curveProgressBps: bigint
   ];
   export interface OutputObject {
     buyer: string;
     token: string;
     tokenAmount: bigint;
-    contractTokenBalance: bigint;
-    ethAmount: bigint;
+    curvePositionAfterTrade: bigint;
+    collateralAmount: bigint;
     refund: bigint;
     fee: bigint;
     dexFee: bigint;
+    curveProgressBps: bigint;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -202,7 +210,7 @@ export namespace MigratedEvent {
     token: AddressLike,
     tokensToMigrate: BigNumberish,
     tokensToBurn: BigNumberish,
-    ethToMigrate: BigNumberish,
+    collateralToMigrate: BigNumberish,
     migrationFee: BigNumberish,
     pair: AddressLike
   ];
@@ -210,7 +218,7 @@ export namespace MigratedEvent {
     token: string,
     tokensToMigrate: bigint,
     tokensToBurn: bigint,
-    ethToMigrate: bigint,
+    collateralToMigrate: bigint,
     migrationFee: bigint,
     pair: string
   ];
@@ -218,7 +226,7 @@ export namespace MigratedEvent {
     token: string;
     tokensToMigrate: bigint;
     tokensToBurn: bigint;
-    ethToMigrate: bigint;
+    collateralToMigrate: bigint;
     migrationFee: bigint;
     pair: string;
   }
@@ -228,11 +236,16 @@ export namespace MigratedEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export namespace NewMoonShotTokenEvent {
-  export type InputTuple = [addr: AddressLike, signature: BytesLike];
-  export type OutputTuple = [addr: string, signature: string];
+export namespace NewMoonshotTokenEvent {
+  export type InputTuple = [
+    addr: AddressLike,
+    creator: AddressLike,
+    signature: BytesLike
+  ];
+  export type OutputTuple = [addr: string, creator: string, signature: string];
   export interface OutputObject {
     addr: string;
+    creator: string;
     signature: string;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
@@ -241,30 +254,36 @@ export namespace NewMoonShotTokenEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export namespace NewMoonShotTokenAndBuyEvent {
+export namespace NewMoonshotTokenAndBuyEvent {
   export type InputTuple = [
     addr: AddressLike,
+    creator: AddressLike,
     signature: BytesLike,
     tokenAmount: BigNumberish,
-    ethAmount: BigNumberish,
+    collateralAmount: BigNumberish,
     fee: BigNumberish,
-    dexFee: BigNumberish
+    dexFee: BigNumberish,
+    curveProgressBps: BigNumberish
   ];
   export type OutputTuple = [
     addr: string,
+    creator: string,
     signature: string,
     tokenAmount: bigint,
-    ethAmount: bigint,
+    collateralAmount: bigint,
     fee: bigint,
-    dexFee: bigint
+    dexFee: bigint,
+    curveProgressBps: bigint
   ];
   export interface OutputObject {
     addr: string;
+    creator: string;
     signature: string;
     tokenAmount: bigint;
-    ethAmount: bigint;
+    collateralAmount: bigint;
     fee: bigint;
     dexFee: bigint;
+    curveProgressBps: bigint;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -277,28 +296,31 @@ export namespace SellExactInEvent {
     seller: AddressLike,
     token: AddressLike,
     tokenAmount: BigNumberish,
-    contractTokenBalance: BigNumberish,
-    ethAmount: BigNumberish,
+    curvePositionAfterTrade: BigNumberish,
+    collateralAmount: BigNumberish,
     fee: BigNumberish,
-    dexFee: BigNumberish
+    dexFee: BigNumberish,
+    curveProgressBps: BigNumberish
   ];
   export type OutputTuple = [
     seller: string,
     token: string,
     tokenAmount: bigint,
-    contractTokenBalance: bigint,
-    ethAmount: bigint,
+    curvePositionAfterTrade: bigint,
+    collateralAmount: bigint,
     fee: bigint,
-    dexFee: bigint
+    dexFee: bigint,
+    curveProgressBps: bigint
   ];
   export interface OutputObject {
     seller: string;
     token: string;
     tokenAmount: bigint;
-    contractTokenBalance: bigint;
-    ethAmount: bigint;
+    curvePositionAfterTrade: bigint;
+    collateralAmount: bigint;
     fee: bigint;
     dexFee: bigint;
+    curveProgressBps: bigint;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -311,28 +333,31 @@ export namespace SellExactOutEvent {
     seller: AddressLike,
     token: AddressLike,
     tokenAmount: BigNumberish,
-    contractTokenBalance: BigNumberish,
-    ethAmount: BigNumberish,
+    curvePositionAfterTrade: BigNumberish,
+    collateralAmount: BigNumberish,
     fee: BigNumberish,
-    dexFee: BigNumberish
+    dexFee: BigNumberish,
+    curveProgressBps: BigNumberish
   ];
   export type OutputTuple = [
     seller: string,
     token: string,
     tokenAmount: bigint,
-    contractTokenBalance: bigint,
-    ethAmount: bigint,
+    curvePositionAfterTrade: bigint,
+    collateralAmount: bigint,
     fee: bigint,
-    dexFee: bigint
+    dexFee: bigint,
+    curveProgressBps: bigint
   ];
   export interface OutputObject {
     seller: string;
     token: string;
     tokenAmount: bigint;
-    contractTokenBalance: bigint;
-    ethAmount: bigint;
+    curvePositionAfterTrade: bigint;
+    collateralAmount: bigint;
     fee: bigint;
     dexFee: bigint;
+    curveProgressBps: bigint;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -348,8 +373,10 @@ export namespace SetConfigEvent {
     feeBasisPoints: BigNumberish,
     dexFeeBasisPoints: BigNumberish,
     migrationFeeFixed: BigNumberish,
+    poolCreationFee: BigNumberish,
     mcUpperLimit: BigNumberish,
     mcLowerLimit: BigNumberish,
+    tokensMigrationThreshold: BigNumberish,
     treasury: AddressLike,
     dexTreasury: AddressLike,
     uniswapV2Router: AddressLike,
@@ -362,8 +389,10 @@ export namespace SetConfigEvent {
     feeBasisPoints: bigint,
     dexFeeBasisPoints: bigint,
     migrationFeeFixed: bigint,
+    poolCreationFee: bigint,
     mcUpperLimit: bigint,
     mcLowerLimit: bigint,
+    tokensMigrationThreshold: bigint,
     treasury: string,
     dexTreasury: string,
     uniswapV2Router: string,
@@ -376,8 +405,10 @@ export namespace SetConfigEvent {
     feeBasisPoints: bigint;
     dexFeeBasisPoints: bigint;
     migrationFeeFixed: bigint;
+    poolCreationFee: bigint;
     mcUpperLimit: bigint;
     mcLowerLimit: bigint;
+    tokensMigrationThreshold: bigint;
     treasury: string;
     dexTreasury: string;
     uniswapV2Router: string;
@@ -389,11 +420,11 @@ export namespace SetConfigEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export interface IMoonShotFactory extends BaseContract {
-  connect(runner?: ContractRunner | null): IMoonShotFactory;
+export interface IMoonshotFactory extends BaseContract {
+  connect(runner?: ContractRunner | null): IMoonshotFactory;
   waitForDeployment(): Promise<this>;
 
-  interface: IMoonShotFactoryInterface;
+  interface: IMoonshotFactoryInterface;
 
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
@@ -448,7 +479,7 @@ export interface IMoonShotFactory extends BaseContract {
     "payable"
   >;
 
-  createMoonShotToken: TypedContractMethod<
+  createMoonshotToken: TypedContractMethod<
     [
       _name: string,
       _symbol: string,
@@ -459,7 +490,7 @@ export interface IMoonShotFactory extends BaseContract {
     "nonpayable"
   >;
 
-  createMoonShotTokenAndBuy: TypedContractMethod<
+  createMoonshotTokenAndBuy: TypedContractMethod<
     [
       _name: string,
       _symbol: string,
@@ -499,8 +530,10 @@ export interface IMoonShotFactory extends BaseContract {
       _feeBasisPoints: BigNumberish,
       _dexFeeBasisPoints: BigNumberish,
       _migrationFeeFixed: BigNumberish,
+      _poolCreationFee: BigNumberish,
       _mcUpperLimit: BigNumberish,
       _mcLowerLimit: BigNumberish,
+      _tokensMigrationThreshold: BigNumberish,
       _treasury: AddressLike,
       _dexTreasury: AddressLike,
       _uniswapV2Router: AddressLike,
@@ -533,7 +566,7 @@ export interface IMoonShotFactory extends BaseContract {
     "payable"
   >;
   getFunction(
-    nameOrSignature: "createMoonShotToken"
+    nameOrSignature: "createMoonshotToken"
   ): TypedContractMethod<
     [
       _name: string,
@@ -545,7 +578,7 @@ export interface IMoonShotFactory extends BaseContract {
     "nonpayable"
   >;
   getFunction(
-    nameOrSignature: "createMoonShotTokenAndBuy"
+    nameOrSignature: "createMoonshotTokenAndBuy"
   ): TypedContractMethod<
     [
       _name: string,
@@ -589,8 +622,10 @@ export interface IMoonShotFactory extends BaseContract {
       _feeBasisPoints: BigNumberish,
       _dexFeeBasisPoints: BigNumberish,
       _migrationFeeFixed: BigNumberish,
+      _poolCreationFee: BigNumberish,
       _mcUpperLimit: BigNumberish,
       _mcLowerLimit: BigNumberish,
+      _tokensMigrationThreshold: BigNumberish,
       _treasury: AddressLike,
       _dexTreasury: AddressLike,
       _uniswapV2Router: AddressLike,
@@ -629,18 +664,18 @@ export interface IMoonShotFactory extends BaseContract {
     MigratedEvent.OutputObject
   >;
   getEvent(
-    key: "NewMoonShotToken"
+    key: "NewMoonshotToken"
   ): TypedContractEvent<
-    NewMoonShotTokenEvent.InputTuple,
-    NewMoonShotTokenEvent.OutputTuple,
-    NewMoonShotTokenEvent.OutputObject
+    NewMoonshotTokenEvent.InputTuple,
+    NewMoonshotTokenEvent.OutputTuple,
+    NewMoonshotTokenEvent.OutputObject
   >;
   getEvent(
-    key: "NewMoonShotTokenAndBuy"
+    key: "NewMoonshotTokenAndBuy"
   ): TypedContractEvent<
-    NewMoonShotTokenAndBuyEvent.InputTuple,
-    NewMoonShotTokenAndBuyEvent.OutputTuple,
-    NewMoonShotTokenAndBuyEvent.OutputObject
+    NewMoonshotTokenAndBuyEvent.InputTuple,
+    NewMoonshotTokenAndBuyEvent.OutputTuple,
+    NewMoonshotTokenAndBuyEvent.OutputObject
   >;
   getEvent(
     key: "SellExactIn"
@@ -665,7 +700,7 @@ export interface IMoonShotFactory extends BaseContract {
   >;
 
   filters: {
-    "BuyExactIn(address,address,uint256,uint256,uint256,uint256,uint256)": TypedContractEvent<
+    "BuyExactIn(address,address,uint256,uint256,uint256,uint256,uint256,uint256)": TypedContractEvent<
       BuyExactInEvent.InputTuple,
       BuyExactInEvent.OutputTuple,
       BuyExactInEvent.OutputObject
@@ -676,7 +711,7 @@ export interface IMoonShotFactory extends BaseContract {
       BuyExactInEvent.OutputObject
     >;
 
-    "BuyExactOut(address,address,uint256,uint256,uint256,uint256,uint256,uint256)": TypedContractEvent<
+    "BuyExactOut(address,address,uint256,uint256,uint256,uint256,uint256,uint256,uint256)": TypedContractEvent<
       BuyExactOutEvent.InputTuple,
       BuyExactOutEvent.OutputTuple,
       BuyExactOutEvent.OutputObject
@@ -709,29 +744,29 @@ export interface IMoonShotFactory extends BaseContract {
       MigratedEvent.OutputObject
     >;
 
-    "NewMoonShotToken(address,bytes)": TypedContractEvent<
-      NewMoonShotTokenEvent.InputTuple,
-      NewMoonShotTokenEvent.OutputTuple,
-      NewMoonShotTokenEvent.OutputObject
+    "NewMoonshotToken(address,address,bytes)": TypedContractEvent<
+      NewMoonshotTokenEvent.InputTuple,
+      NewMoonshotTokenEvent.OutputTuple,
+      NewMoonshotTokenEvent.OutputObject
     >;
-    NewMoonShotToken: TypedContractEvent<
-      NewMoonShotTokenEvent.InputTuple,
-      NewMoonShotTokenEvent.OutputTuple,
-      NewMoonShotTokenEvent.OutputObject
-    >;
-
-    "NewMoonShotTokenAndBuy(address,bytes,uint256,uint256,uint256,uint256)": TypedContractEvent<
-      NewMoonShotTokenAndBuyEvent.InputTuple,
-      NewMoonShotTokenAndBuyEvent.OutputTuple,
-      NewMoonShotTokenAndBuyEvent.OutputObject
-    >;
-    NewMoonShotTokenAndBuy: TypedContractEvent<
-      NewMoonShotTokenAndBuyEvent.InputTuple,
-      NewMoonShotTokenAndBuyEvent.OutputTuple,
-      NewMoonShotTokenAndBuyEvent.OutputObject
+    NewMoonshotToken: TypedContractEvent<
+      NewMoonshotTokenEvent.InputTuple,
+      NewMoonshotTokenEvent.OutputTuple,
+      NewMoonshotTokenEvent.OutputObject
     >;
 
-    "SellExactIn(address,address,uint256,uint256,uint256,uint256,uint256)": TypedContractEvent<
+    "NewMoonshotTokenAndBuy(address,address,bytes,uint256,uint256,uint256,uint256,uint256)": TypedContractEvent<
+      NewMoonshotTokenAndBuyEvent.InputTuple,
+      NewMoonshotTokenAndBuyEvent.OutputTuple,
+      NewMoonshotTokenAndBuyEvent.OutputObject
+    >;
+    NewMoonshotTokenAndBuy: TypedContractEvent<
+      NewMoonshotTokenAndBuyEvent.InputTuple,
+      NewMoonshotTokenAndBuyEvent.OutputTuple,
+      NewMoonshotTokenAndBuyEvent.OutputObject
+    >;
+
+    "SellExactIn(address,address,uint256,uint256,uint256,uint256,uint256,uint256)": TypedContractEvent<
       SellExactInEvent.InputTuple,
       SellExactInEvent.OutputTuple,
       SellExactInEvent.OutputObject
@@ -742,7 +777,7 @@ export interface IMoonShotFactory extends BaseContract {
       SellExactInEvent.OutputObject
     >;
 
-    "SellExactOut(address,address,uint256,uint256,uint256,uint256,uint256)": TypedContractEvent<
+    "SellExactOut(address,address,uint256,uint256,uint256,uint256,uint256,uint256)": TypedContractEvent<
       SellExactOutEvent.InputTuple,
       SellExactOutEvent.OutputTuple,
       SellExactOutEvent.OutputObject
@@ -753,7 +788,7 @@ export interface IMoonShotFactory extends BaseContract {
       SellExactOutEvent.OutputObject
     >;
 
-    "SetConfig(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,address,address,address,address)": TypedContractEvent<
+    "SetConfig(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,address,address,address,address)": TypedContractEvent<
       SetConfigEvent.InputTuple,
       SetConfigEvent.OutputTuple,
       SetConfigEvent.OutputObject

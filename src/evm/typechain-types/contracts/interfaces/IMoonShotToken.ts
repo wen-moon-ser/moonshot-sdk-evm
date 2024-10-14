@@ -23,7 +23,7 @@ import type {
   TypedContractMethod,
 } from "../../common";
 
-export interface IMoonShotTokenInterface extends Interface {
+export interface IMoonshotTokenInterface extends Interface {
   getFunction(
     nameOrSignature:
       | "allowance"
@@ -33,6 +33,8 @@ export interface IMoonShotTokenInterface extends Interface {
       | "buyExactOut"
       | "getAmountInAndFee"
       | "getAmountOutAndFee"
+      | "getCurveProgressBps"
+      | "getMarketCap"
       | "migrate"
       | "sellExactIn"
       | "sellExactOut"
@@ -71,6 +73,14 @@ export interface IMoonShotTokenInterface extends Interface {
     functionFragment: "getAmountOutAndFee",
     values: [BigNumberish, BigNumberish, BigNumberish, boolean]
   ): string;
+  encodeFunctionData(
+    functionFragment: "getCurveProgressBps",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getMarketCap",
+    values?: undefined
+  ): string;
   encodeFunctionData(functionFragment: "migrate", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "sellExactIn",
@@ -107,6 +117,14 @@ export interface IMoonShotTokenInterface extends Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "getAmountOutAndFee",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getCurveProgressBps",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getMarketCap",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "migrate", data: BytesLike): Result;
@@ -165,11 +183,11 @@ export namespace TransferEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export interface IMoonShotToken extends BaseContract {
-  connect(runner?: ContractRunner | null): IMoonShotToken;
+export interface IMoonshotToken extends BaseContract {
+  connect(runner?: ContractRunner | null): IMoonshotToken;
   waitForDeployment(): Promise<this>;
 
-  interface: IMoonShotTokenInterface;
+  interface: IMoonshotTokenInterface;
 
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
@@ -268,13 +286,17 @@ export interface IMoonShotToken extends BaseContract {
     "view"
   >;
 
+  getCurveProgressBps: TypedContractMethod<[], [bigint], "view">;
+
+  getMarketCap: TypedContractMethod<[], [bigint], "view">;
+
   migrate: TypedContractMethod<
     [],
     [
       [bigint, bigint, bigint] & {
         tokensToMigrate: bigint;
         tokensToBurn: bigint;
-        ethAmount: bigint;
+        collateralAmount: bigint;
       }
     ],
     "nonpayable"
@@ -391,6 +413,12 @@ export interface IMoonShotToken extends BaseContract {
     "view"
   >;
   getFunction(
+    nameOrSignature: "getCurveProgressBps"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "getMarketCap"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
     nameOrSignature: "migrate"
   ): TypedContractMethod<
     [],
@@ -398,7 +426,7 @@ export interface IMoonShotToken extends BaseContract {
       [bigint, bigint, bigint] & {
         tokensToMigrate: bigint;
         tokensToBurn: bigint;
-        ethAmount: bigint;
+        collateralAmount: bigint;
       }
     ],
     "nonpayable"
