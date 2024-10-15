@@ -1,1 +1,1 @@
-export * from './MoonshotFactory';
+export * from './Moonshot';

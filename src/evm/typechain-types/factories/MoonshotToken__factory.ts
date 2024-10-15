@@ -8,12 +8,12 @@ import {
   Interface,
 } from "ethers";
 import type { Signer, ContractDeployTransaction, ContractRunner } from "ethers";
-import type { NonPayableOverrides } from "../../common";
+import type { NonPayableOverrides } from "../common";
 import type {
   MoonshotToken,
   MoonshotTokenInterface,
   IMoonshotToken,
-} from "../../contracts/MoonshotToken";
+} from "../MoonshotToken";
 
 const _abi = [
   {

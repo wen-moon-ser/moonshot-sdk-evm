@@ -1,9 +1,5 @@
 import { ContractTransaction, ethers } from 'ethers';
-import {
-  MoonshotFactory,
-  MoonshotToken,
-  MoonshotToken__factory,
-} from '../../evm';
+import { MoonshotToken, MoonshotToken__factory } from '../../evm';
 import { CurveAccount } from '../curve/CurveAccount';
 import {
   GetTokenAmountOptions,
@@ -14,25 +10,26 @@ import {
   GetCollateralAmountOptionsSync,
 } from './GetCollateralAmountOptions';
 import { PrepareTxOptions } from './PrepareTxOptions';
-import { ConstantProductCurveV1Adapter } from '../curve/ConstantProductCurveAdapter';
+import { BaseConstantProductCurveV1Adapter } from '../curve/ConstantProductCurveAdapter';
 import { AbstractCurveAdapter } from '../curve/AbstractCurveAdapter';
 import { getCurveAccount } from '../../evm/utils/getCurveAccount';
 import { InitTokenOptions } from './InitTokenOptions';
 import { FixedSide } from './FixedSide';
 import { CurveType } from '../curve';
+import { Moonshot } from '../moonshotFactory';
 
 export class Token {
   private tokenAddress: string;
 
   private token: MoonshotToken;
 
-  private factory: MoonshotFactory;
+  private factory: Moonshot;
 
   private tokenCurveAdapter: AbstractCurveAdapter;
 
   constructor(
     token: MoonshotToken,
-    factory: MoonshotFactory,
+    factory: Moonshot,
     tokenCurveAdapter: AbstractCurveAdapter,
     tokenAddress: string,
   ) {
@@ -54,7 +51,7 @@ export class Token {
       tokenCurveAdapterType.toString() ==
       CurveType.ConstantProductCurveV1.toString()
     ) {
-      tokenCurveAdapter = new ConstantProductCurveV1Adapter(token);
+      tokenCurveAdapter = new BaseConstantProductCurveV1Adapter(token);
     } else {
       throw new Error('Unsupported curve type');
     }
@@ -109,36 +106,44 @@ export class Token {
 
     if (options.tradeDirection == 'BUY') {
       if (options.fixedSide == FixedSide.IN) {
-        tx = await this.factory.buyExactOut.populateTransaction(
-          this.tokenAddress,
-          options.tokenAmount,
-          options.collateralAmount,
-          {
-            value: options.collateralAmount,
-          },
-        );
+        tx = await this.factory
+          .getFactory()
+          .buyExactOut.populateTransaction(
+            this.tokenAddress,
+            options.tokenAmount,
+            options.collateralAmount,
+            {
+              value: options.collateralAmount,
+            },
+          );
       } else {
-        tx = await this.factory.buyExactIn.populateTransaction(
-          this.tokenAddress,
-          options.tokenAmount,
-          {
-            value: options.collateralAmount,
-          },
-        );
+        tx = await this.factory
+          .getFactory()
+          .buyExactIn.populateTransaction(
+            this.tokenAddress,
+            options.tokenAmount,
+            {
+              value: options.collateralAmount,
+            },
+          );
       }
     } else {
       if (options.fixedSide == FixedSide.IN) {
-        tx = await this.factory.sellExactOut.populateTransaction(
-          this.tokenAddress,
-          options.tokenAmount,
-          options.collateralAmount,
-        );
+        tx = await this.factory
+          .getFactory()
+          .sellExactOut.populateTransaction(
+            this.tokenAddress,
+            options.tokenAmount,
+            options.collateralAmount,
+          );
       } else {
-        tx = await this.factory.sellExactIn.populateTransaction(
-          this.tokenAddress,
-          options.tokenAmount,
-          options.collateralAmount,
-        );
+        tx = await this.factory
+          .getFactory()
+          .sellExactIn.populateTransaction(
+            this.tokenAddress,
+            options.tokenAmount,
+            options.collateralAmount,
+          );
       }
     }
 

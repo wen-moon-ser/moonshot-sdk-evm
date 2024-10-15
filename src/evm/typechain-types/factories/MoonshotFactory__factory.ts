@@ -14,11 +14,11 @@ import type {
   ContractDeployTransaction,
   ContractRunner,
 } from "ethers";
-import type { NonPayableOverrides } from "../../common";
+import type { NonPayableOverrides } from "../common";
 import type {
   MoonshotFactory,
   MoonshotFactoryInterface,
-} from "../../contracts/MoonshotFactory";
+} from "../MoonshotFactory";
 
 const _abi = [
   {
@@ -829,7 +829,7 @@ const _abi = [
         type: "uint256",
       },
     ],
-    name: "MoonshotTokens",
+    name: "moonshotTokens",
     outputs: [
       {
         internalType: "address",

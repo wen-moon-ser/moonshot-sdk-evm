@@ -1,9 +1,6 @@
-import {
-  MoonshotFactory,
-  MoonshotFactory__factory,
-  MoonshotToken__factory,
-} from '../../evm';
+import { MoonshotToken__factory, MoonshotFactory__factory } from '../../evm';
 import { BigNumberish, ethers, Wallet } from 'ethers';
+import { MoonshotFactory } from '../../evm';
 import { FixedSide } from '../token';
 import { AmountAndFee } from './AmountAndFee';
 

@@ -5,12 +5,12 @@ import {
   GetTokenAmountOptionsSync,
 } from '../token';
 import { AbstractCurveAdapter } from './AbstractCurveAdapter';
-import { ConstantProductCurveV1 } from '@heliofi/launchpad-common';
+import { BaseConstantProductCurveV1 } from '@heliofi/launchpad-common';
 
-export class ConstantProductCurveV1Adapter extends AbstractCurveAdapter {
+export class BaseConstantProductCurveV1Adapter extends AbstractCurveAdapter {
   private readonly platformFeeBps: number = 100;
 
-  private readonly curve = new ConstantProductCurveV1();
+  private readonly curve = new BaseConstantProductCurveV1();
 
   async getCollateralAmountByTokens(
     options: GetCollateralAmountOptions,

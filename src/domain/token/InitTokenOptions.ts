@@ -1,10 +1,10 @@
 import { CurveType } from '@heliofi/launchpad-common';
 import { ethers } from 'ethers';
-import { MoonshotFactory } from '../../evm';
+import { Moonshot } from '../moonshotFactory';
 
 export interface InitTokenOptions {
   tokenAddress: string;
-  factory: MoonshotFactory;
+  factory: Moonshot;
   signer: ethers.Wallet;
   curveType?: CurveType;
 }

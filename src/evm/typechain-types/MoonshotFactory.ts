@@ -21,7 +21,7 @@ import type {
   TypedLogDescription,
   TypedListener,
   TypedContractMethod,
-} from "../common";
+} from "./common";
 
 export interface MoonshotFactoryInterface extends Interface {
   getFunction(
@@ -37,7 +37,7 @@ export interface MoonshotFactoryInterface extends Interface {
       | "mcUpperLimit"
       | "migrate"
       | "migrationFeeFixed"
-      | "MoonshotTokens"
+      | "moonshotTokens"
       | "owner"
       | "poolCreationFee"
       | "readyForMigration"
@@ -115,7 +115,7 @@ export interface MoonshotFactoryInterface extends Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "MoonshotTokens",
+    functionFragment: "moonshotTokens",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
@@ -228,7 +228,7 @@ export interface MoonshotFactoryInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "MoonshotTokens",
+    functionFragment: "moonshotTokens",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
@@ -698,7 +698,7 @@ export interface MoonshotFactory extends BaseContract {
 
   migrationFeeFixed: TypedContractMethod<[], [bigint], "view">;
 
-  MoonshotTokens: TypedContractMethod<[arg0: BigNumberish], [string], "view">;
+  moonshotTokens: TypedContractMethod<[arg0: BigNumberish], [string], "view">;
 
   owner: TypedContractMethod<[], [string], "view">;
 
@@ -842,7 +842,7 @@ export interface MoonshotFactory extends BaseContract {
     nameOrSignature: "migrationFeeFixed"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
-    nameOrSignature: "MoonshotTokens"
+    nameOrSignature: "moonshotTokens"
   ): TypedContractMethod<[arg0: BigNumberish], [string], "view">;
   getFunction(
     nameOrSignature: "owner"

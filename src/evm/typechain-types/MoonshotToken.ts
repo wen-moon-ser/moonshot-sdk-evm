@@ -21,7 +21,7 @@ import type {
   TypedLogDescription,
   TypedListener,
   TypedContractMethod,
-} from "../common";
+} from "./common";
 
 export declare namespace IMoonshotToken {
   export type ConstructorParamsStruct = {

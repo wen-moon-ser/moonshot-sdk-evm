@@ -1,1 +1,105 @@
-# moonshot-sdk-evm
+# @wen-moon-ser/moonshot-sdk-evm
+
+Moonshot SDK for EVM helps calculate moonshot token prices at any point in the bonding curve. The package also allows the users to generate buy and sell transactions, provide the slippage amount and fix it to a trading side.
+
+By Following the example you can create your high-performance trading bot within minutes.
+
+[npm link](https://www.npmjs.com/package/@wen-moon-ser/moonshot-sdk-evm)
+
+## Installation
+
+Install the package using `yarn` or `npm`
+
+```shell
+npm i @wen-moon-ser/moonshot-sdk-evm
+# or
+yarn add @wen-moon-ser/moonshot-sdk-evm
+```
+
+## Direct RPC call prepare and send transaction
+
+Generate a keypair and send funds for the right environment (testnet or mainnet).
+
+### Buy example
+```typescript
+import { Wallet } from 'ethers';
+import { JsonRpcProvider } from 'ethers';
+import { Moonshot, Token, FixedSide } from '@wen-moon-ser/moonshot-sdk-evm';
+
+export const buyTx = async (): Promise<void> => {
+  console.log('--- Buying token example ---');
+
+  const rpcUrl = 'https://eth.llamarpc.com';
+
+  const provider = new JsonRpcProvider(rpcUrl);
+  const signer = new Wallet('private key', provider);
+
+  const factory = new Moonshot(
+    signer,
+    '0x1234567890123456789012345678901234567890',
+  );
+  const token = await Token.create({
+    tokenAddress: '0x1234567890123456789012345678901234567890',
+    factory,
+    signer,
+  });
+
+  const tokenAmount = 10000n * 10n ** 18n; // Buy 10k tokens
+  const collateralAmount = await token.getCollateralAmountByTokens({
+    tokenAmount,
+    tradeDirection: 'BUY',
+  });
+
+  const tx = await token.prepareTx({
+    slippageBps: 500,
+    tokenAmount,
+    collateralAmount,
+    tradeDirection: 'BUY',
+    fixedSide: FixedSide.OUT,
+  });
+
+  const txHash = await signer.sendTransaction(tx);
+};
+```
+
+### Sell example
+```typescript
+import { Wallet } from 'ethers';
+import { JsonRpcProvider } from 'ethers';
+import { Moonshot, Token, FixedSide } from '@wen-moon-ser/moonshot-sdk-evm';
+
+export const buyTx = async (): Promise<void> => {
+	console.log('--- Buying token example ---');
+
+	const rpcUrl = 'https://eth.llamarpc.com';
+
+	const provider = new JsonRpcProvider(rpcUrl);
+	const signer = new Wallet('private key', provider);
+
+	const factory = new Moonshot(
+		signer,
+		'0x1234567890123456789012345678901234567890',
+	);
+	const token = await Token.create({
+		tokenAddress: '0x1234567890123456789012345678901234567890',
+		factory,
+		signer,
+	});
+
+	const tokenAmount = 10000n * 10n ** 18n; // Buy 10k tokens
+	const collateralAmount = await token.getCollateralAmountByTokens({
+		tokenAmount,
+		tradeDirection: 'SELL',
+	});
+
+	const tx = await token.prepareTx({
+		slippageBps: 500,
+		tokenAmount,
+		collateralAmount,
+		tradeDirection: 'SELL',
+		fixedSide: FixedSide.OUT,
+	});
+
+	const txHash = await signer.sendTransaction(tx);
+};
+```
