@@ -15,7 +15,7 @@ import { AbstractCurveAdapter } from '../curve/AbstractCurveAdapter';
 import { getCurveAccount } from '../../evm/utils/getCurveAccount';
 import { InitTokenOptions } from './InitTokenOptions';
 import { FixedSide } from './FixedSide';
-import { Moonshot } from '../moonshotFactory';
+import { Moonshot } from '../moonshot';
 import { CurveType } from '../curve/CurveTypes';
 
 export class Token {
@@ -40,10 +40,7 @@ export class Token {
   }
 
   static async create(options: InitTokenOptions): Promise<Token> {
-    const token = MoonshotToken__factory.connect(
-      options.tokenAddress,
-      options.signer,
-    );
+    const token = MoonshotToken__factory.connect(options.tokenAddress);
     const tokenCurveAdapterType = await token.curveType();
 
     let tokenCurveAdapter: AbstractCurveAdapter;
@@ -58,7 +55,7 @@ export class Token {
 
     return new Token(
       token,
-      options.factory,
+      options.moonshot,
       tokenCurveAdapter,
       await token.getAddress(),
     );

@@ -24,7 +24,7 @@ Generate a keypair and send funds for the right environment (testnet or mainnet)
 ```typescript
 import { Wallet } from 'ethers';
 import { JsonRpcProvider } from 'ethers';
-import { Moonshot, Token, FixedSide } from '@wen-moon-ser/moonshot-sdk-evm';
+import { Moonshot, Token, FixedSide, Environment } from '@wen-moon-ser/moonshot-sdk-evm';
 
 export const buyTx = async (): Promise<void> => {
   console.log('--- Buying token example ---');
@@ -34,14 +34,14 @@ export const buyTx = async (): Promise<void> => {
   const provider = new JsonRpcProvider(rpcUrl);
   const signer = new Wallet('private key', provider);
 
-  const factory = new Moonshot(
-    signer,
-    '0x1234567890123456789012345678901234567890',
-  );
+  const moonshot = new Moonshot({
+      signer: signer,
+      env: Environment.Testnet,
+  });
+
   const token = await Token.create({
     tokenAddress: '0x1234567890123456789012345678901234567890',
-    factory,
-    signer,
+    moonshot,
   });
 
   const tokenAmount = 10000n * 10n ** 18n; // Buy 10k tokens
@@ -84,14 +84,14 @@ export const buyTx = async (): Promise<void> => {
   const provider = new JsonRpcProvider(rpcUrl);
   const signer = new Wallet('private key', provider);
 
-  const factory = new Moonshot(
-    signer,
-    '0x1234567890123456789012345678901234567890',
-  );
+  const moonshot = new Moonshot({
+      signer: signer,
+      env: Environment.Testnet,
+  });
+
   const token = await Token.create({
     tokenAddress: '0x1234567890123456789012345678901234567890',
-    factory,
-    signer,
+    moonshot,
   });
 
   const tokenAmount = 10000n * 10n ** 18n; // Buy 10k tokens

@@ -3,17 +3,25 @@ import { BigNumberish, ethers, Wallet } from 'ethers';
 import { MoonshotFactory } from '../../evm';
 import { FixedSide } from '../token';
 import { AmountAndFee } from './AmountAndFee';
+import { Environment } from './Environment';
+import { BASE_MAINNET_ADDRESS, BASE_SEPOLIA_ADDRESS } from './Addresses';
+import { MoonshotInitOptions } from './MoonshotInitOptions';
 
 export class Moonshot {
   private factory: MoonshotFactory;
 
   private signerWithProvider: Wallet;
 
-  constructor(signer: ethers.Wallet, factoryAddress: string) {
-    this.signerWithProvider = signer;
+  constructor(options: MoonshotInitOptions) {
+    this.signerWithProvider = options.signer;
+
+    const address =
+      options.env == Environment.Mainnet
+        ? BASE_MAINNET_ADDRESS
+        : BASE_SEPOLIA_ADDRESS;
 
     this.factory = MoonshotFactory__factory.connect(
-      factoryAddress,
+      address,
       this.signerWithProvider,
     );
   }
