@@ -16,10 +16,6 @@ npm i @wen-moon-ser/moonshot-sdk-evm
 yarn add @wen-moon-ser/moonshot-sdk-evm
 ```
 
-## Direct RPC call prepare and send transaction
-
-Generate a keypair and send funds for the right environment (testnet or mainnet).
-
 ### Buy example
 ```typescript
 import { Wallet } from 'ethers';
@@ -29,7 +25,7 @@ import { Moonshot, Token, FixedSide, Environment } from '@wen-moon-ser/moonshot-
 export const buyTx = async (): Promise<void> => {
   console.log('--- Buying token example ---');
 
-  const rpcUrl = 'https://base-sepolia.g.alchemy.com/v2/yourAPIkey';
+  const rpcUrl = 'https://base-sepolia.g.alchemy.com/v2/74lNV86wnmksjklkKrJN5JUtjdBHoSi7';
 
   const provider = new JsonRpcProvider(rpcUrl);
   const signer = new Wallet('private key', provider);
@@ -79,7 +75,7 @@ import { Moonshot, Token, FixedSide } from '@wen-moon-ser/moonshot-sdk-evm';
 export const buyTx = async (): Promise<void> => {
   console.log('--- Buying token example ---');
 
-  const rpcUrl = 'https://base-sepolia.g.alchemy.com/v2/yourAPIkey';
+  const rpcUrl = 'https://eth.llamarpc.com';
 
   const provider = new JsonRpcProvider(rpcUrl);
   const signer = new Wallet('private key', provider);
