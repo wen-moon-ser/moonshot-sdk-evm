@@ -25,7 +25,7 @@ import { Moonshot, Token, FixedSide, Environment } from '@wen-moon-ser/moonshot-
 export const buyTx = async (): Promise<void> => {
   console.log('--- Buying token example ---');
 
-  const rpcUrl = 'https://base-sepolia.g.alchemy.com/v2/74lNV86wnmksjklkKrJN5JUtjdBHoSi7';
+  const rpcUrl = 'https://base-sepolia.g.alchemy.com/v2/yourAPIkey';
 
   const provider = new JsonRpcProvider(rpcUrl);
   const signer = new Wallet('private key', provider);
@@ -75,7 +75,7 @@ import { Moonshot, Token, FixedSide } from '@wen-moon-ser/moonshot-sdk-evm';
 export const buyTx = async (): Promise<void> => {
   console.log('--- Buying token example ---');
 
-  const rpcUrl = 'https://eth.llamarpc.com';
+  const rpcUrl = 'https://base-sepolia.g.alchemy.com/v2/yourAPIkey';
 
   const provider = new JsonRpcProvider(rpcUrl);
   const signer = new Wallet('private key', provider);
