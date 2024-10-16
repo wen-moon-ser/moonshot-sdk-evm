@@ -57,8 +57,16 @@ export const buyTx = async (): Promise<void> => {
     tradeDirection: 'BUY',
     fixedSide: FixedSide.OUT,
   });
+  tx.from = await signer.getAddress();
+
+  const gas = await provider.estimateGas(tx);
+  const feeData = await provider.getFeeData();
+
+  tx.gasLimit = gas;
+  tx.gasPrice = feeData.gasPrice!;
 
   const txHash = await signer.sendTransaction(tx);
+  console.log('Transaction hash:', txHash);
 };
 ```
 
@@ -69,37 +77,46 @@ import { JsonRpcProvider } from 'ethers';
 import { Moonshot, Token, FixedSide } from '@wen-moon-ser/moonshot-sdk-evm';
 
 export const buyTx = async (): Promise<void> => {
-	console.log('--- Buying token example ---');
+  console.log('--- Buying token example ---');
 
-	const rpcUrl = 'https://eth.llamarpc.com';
+  const rpcUrl = 'https://eth.llamarpc.com';
 
-	const provider = new JsonRpcProvider(rpcUrl);
-	const signer = new Wallet('private key', provider);
+  const provider = new JsonRpcProvider(rpcUrl);
+  const signer = new Wallet('private key', provider);
 
-	const factory = new Moonshot(
-		signer,
-		'0x1234567890123456789012345678901234567890',
-	);
-	const token = await Token.create({
-		tokenAddress: '0x1234567890123456789012345678901234567890',
-		factory,
-		signer,
-	});
+  const factory = new Moonshot(
+    signer,
+    '0x1234567890123456789012345678901234567890',
+  );
+  const token = await Token.create({
+    tokenAddress: '0x1234567890123456789012345678901234567890',
+    factory,
+    signer,
+  });
 
-	const tokenAmount = 10000n * 10n ** 18n; // Buy 10k tokens
-	const collateralAmount = await token.getCollateralAmountByTokens({
-		tokenAmount,
-		tradeDirection: 'SELL',
-	});
+  const tokenAmount = 10000n * 10n ** 18n; // Buy 10k tokens
+  const collateralAmount = await token.getCollateralAmountByTokens({
+    tokenAmount,
+    tradeDirection: 'SELL',
+  });
 
-	const tx = await token.prepareTx({
-		slippageBps: 500,
-		tokenAmount,
-		collateralAmount,
-		tradeDirection: 'SELL',
-		fixedSide: FixedSide.OUT,
-	});
+  const tx = await token.prepareTx({
+    slippageBps: 500,
+    tokenAmount,
+    collateralAmount,
+    tradeDirection: 'SELL',
+    fixedSide: FixedSide.OUT,
+  });
 
-	const txHash = await signer.sendTransaction(tx);
+  tx.from = await signer.getAddress();
+
+  const gas = await provider.estimateGas(tx);
+  const feeData = await provider.getFeeData();
+
+  tx.gasLimit = gas;
+  tx.gasPrice = feeData.gasPrice!;
+
+  const txHash = await signer.sendTransaction(tx);
+  console.log('Transaction hash:', txHash);
 };
 ```

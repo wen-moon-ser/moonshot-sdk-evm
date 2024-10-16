@@ -1,4 +1,4 @@
-import { ContractTransaction, ethers } from 'ethers';
+import { ContractTransaction } from 'ethers';
 import { MoonshotToken, MoonshotToken__factory } from '../../evm';
 import { CurveAccount } from '../curve/CurveAccount';
 import {
@@ -10,13 +10,13 @@ import {
   GetCollateralAmountOptionsSync,
 } from './GetCollateralAmountOptions';
 import { PrepareTxOptions } from './PrepareTxOptions';
-import { BaseConstantProductCurveV1Adapter } from '../curve/ConstantProductCurveAdapter';
+import { BaseConstantProductCurveV1Adapter } from '../curve/BaseConstantProductCurveAdapter';
 import { AbstractCurveAdapter } from '../curve/AbstractCurveAdapter';
 import { getCurveAccount } from '../../evm/utils/getCurveAccount';
 import { InitTokenOptions } from './InitTokenOptions';
 import { FixedSide } from './FixedSide';
-import { CurveType } from '../curve';
 import { Moonshot } from '../moonshotFactory';
+import { CurveType } from '../curve/CurveTypes';
 
 export class Token {
   private tokenAddress: string;
@@ -27,7 +27,7 @@ export class Token {
 
   private tokenCurveAdapter: AbstractCurveAdapter;
 
-  constructor(
+  private constructor(
     token: MoonshotToken,
     factory: Moonshot,
     tokenCurveAdapter: AbstractCurveAdapter,
@@ -55,8 +55,6 @@ export class Token {
     } else {
       throw new Error('Unsupported curve type');
     }
-
-    ethers.Wallet.createRandom();
 
     return new Token(
       token,
