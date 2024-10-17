@@ -1,4 +1,4 @@
 export enum Environment {
-  Testnet,
-  Mainnet,
+  TESTNET,
+  MAINNET,
 }

@@ -32,7 +32,7 @@ export const buyTx = async (): Promise<void> => {
 
   const moonshot = new Moonshot({
       signer: signer,
-      env: Environment.Testnet,
+      env: Environment.TESTNET,
   });
 
   const token = await Token.create({
@@ -82,7 +82,7 @@ export const buyTx = async (): Promise<void> => {
 
   const moonshot = new Moonshot({
       signer: signer,
-      env: Environment.Testnet,
+      env: Environment.TESTNET,
   });
 
   const token = await Token.create({

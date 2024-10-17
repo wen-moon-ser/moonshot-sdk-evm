@@ -16,7 +16,7 @@ export class Moonshot {
     this.signerWithProvider = options.signer;
 
     const address =
-      options.env == Environment.Mainnet
+      options.env == Environment.MAINNET
         ? BASE_MAINNET_ADDRESS
         : BASE_SEPOLIA_ADDRESS;
 
