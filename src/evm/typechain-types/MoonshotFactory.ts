@@ -13,7 +13,7 @@ import type {
   ContractRunner,
   ContractMethod,
   Listener,
-} from "ethers";
+} from 'ethers';
 import type {
   TypedContractEvent,
   TypedDeferredTopicFilter,
@@ -21,126 +21,130 @@ import type {
   TypedLogDescription,
   TypedListener,
   TypedContractMethod,
-} from "./common";
+} from '../common';
 
 export interface MoonshotFactoryInterface extends Interface {
   getFunction(
     nameOrSignature:
-      | "buyExactIn"
-      | "buyExactOut"
-      | "createMoonshotToken"
-      | "createMoonshotTokenAndBuy"
-      | "dexFeeBasisPoints"
-      | "dexTreasury"
-      | "feeBasisPoints"
-      | "mcLowerLimit"
-      | "mcUpperLimit"
-      | "migrate"
-      | "migrationFeeFixed"
-      | "moonshotTokens"
-      | "owner"
-      | "poolCreationFee"
-      | "readyForMigration"
-      | "renounceOwnership"
-      | "sellExactIn"
-      | "sellExactOut"
-      | "setConfig"
-      | "signer"
-      | "tokensMigrationThreshold"
-      | "totalSupply"
-      | "transferOwnership"
-      | "treasury"
-      | "uniswapV2Router"
-      | "usedSignatures"
-      | "virtualCollateralReserves"
-      | "virtualTokenReserves"
+      | 'UNISWAP_V2_ROUTER'
+      | 'buyExactIn'
+      | 'buyExactOut'
+      | 'createMoonshotToken'
+      | 'createMoonshotTokenAndBuy'
+      | 'dexFeeBasisPoints'
+      | 'dexTreasury'
+      | 'feeBasisPoints'
+      | 'mcLowerLimit'
+      | 'mcUpperLimit'
+      | 'migrate'
+      | 'migrationFeeFixed'
+      | 'moonshotTokens'
+      | 'owner'
+      | 'poolCreationFee'
+      | 'readyForMigration'
+      | 'renounceOwnership'
+      | 'sellExactIn'
+      | 'sellExactOut'
+      | 'setConfig'
+      | 'signer'
+      | 'tokensMigrationThreshold'
+      | 'totalSupply'
+      | 'transferOwnership'
+      | 'treasury'
+      | 'usedSignatures'
+      | 'virtualCollateralReserves'
+      | 'virtualTokenReserves',
   ): FunctionFragment;
 
   getEvent(
     nameOrSignatureOrTopic:
-      | "BuyExactIn"
-      | "BuyExactOut"
-      | "MarketcapReached"
-      | "Migrated"
-      | "NewMoonshotToken"
-      | "NewMoonshotTokenAndBuy"
-      | "OwnershipTransferred"
-      | "SellExactIn"
-      | "SellExactOut"
-      | "SetConfig"
+      | 'BuyExactIn'
+      | 'BuyExactOut'
+      | 'MarketcapReached'
+      | 'Migrated'
+      | 'NewMoonshotToken'
+      | 'NewMoonshotTokenAndBuy'
+      | 'OwnershipTransferred'
+      | 'SellExactIn'
+      | 'SellExactOut'
+      | 'SetConfig',
   ): EventFragment;
 
   encodeFunctionData(
-    functionFragment: "buyExactIn",
-    values: [AddressLike, BigNumberish]
+    functionFragment: 'UNISWAP_V2_ROUTER',
+    values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "buyExactOut",
-    values: [AddressLike, BigNumberish, BigNumberish]
+    functionFragment: 'buyExactIn',
+    values: [AddressLike, BigNumberish],
   ): string;
   encodeFunctionData(
-    functionFragment: "createMoonshotToken",
-    values: [string, string, BigNumberish, BytesLike]
+    functionFragment: 'buyExactOut',
+    values: [AddressLike, BigNumberish, BigNumberish],
   ): string;
   encodeFunctionData(
-    functionFragment: "createMoonshotTokenAndBuy",
-    values: [string, string, BigNumberish, BigNumberish, BytesLike]
+    functionFragment: 'createMoonshotToken',
+    values: [string, string, BigNumberish, BytesLike],
   ): string;
   encodeFunctionData(
-    functionFragment: "dexFeeBasisPoints",
-    values?: undefined
+    functionFragment: 'createMoonshotTokenAndBuy',
+    values: [string, string, BigNumberish, BigNumberish, BytesLike],
   ): string;
   encodeFunctionData(
-    functionFragment: "dexTreasury",
-    values?: undefined
+    functionFragment: 'dexFeeBasisPoints',
+    values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "feeBasisPoints",
-    values?: undefined
+    functionFragment: 'dexTreasury',
+    values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "mcLowerLimit",
-    values?: undefined
+    functionFragment: 'feeBasisPoints',
+    values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "mcUpperLimit",
-    values?: undefined
+    functionFragment: 'mcLowerLimit',
+    values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "migrate",
-    values: [AddressLike]
+    functionFragment: 'mcUpperLimit',
+    values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "migrationFeeFixed",
-    values?: undefined
+    functionFragment: 'migrate',
+    values: [AddressLike],
   ): string;
   encodeFunctionData(
-    functionFragment: "moonshotTokens",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "poolCreationFee",
-    values?: undefined
+    functionFragment: 'migrationFeeFixed',
+    values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "readyForMigration",
-    values: [AddressLike]
+    functionFragment: 'moonshotTokens',
+    values: [BigNumberish],
+  ): string;
+  encodeFunctionData(functionFragment: 'owner', values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: 'poolCreationFee',
+    values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "renounceOwnership",
-    values?: undefined
+    functionFragment: 'readyForMigration',
+    values: [AddressLike],
   ): string;
   encodeFunctionData(
-    functionFragment: "sellExactIn",
-    values: [AddressLike, BigNumberish, BigNumberish]
+    functionFragment: 'renounceOwnership',
+    values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "sellExactOut",
-    values: [AddressLike, BigNumberish, BigNumberish]
+    functionFragment: 'sellExactIn',
+    values: [AddressLike, BigNumberish, BigNumberish],
   ): string;
   encodeFunctionData(
-    functionFragment: "setConfig",
+    functionFragment: 'sellExactOut',
+    values: [AddressLike, BigNumberish, BigNumberish],
+  ): string;
+  encodeFunctionData(
+    functionFragment: 'setConfig',
     values: [
       BigNumberish,
       BigNumberish,
@@ -155,133 +159,128 @@ export interface MoonshotFactoryInterface extends Interface {
       AddressLike,
       AddressLike,
       AddressLike,
-      AddressLike
-    ]
+    ],
   ): string;
-  encodeFunctionData(functionFragment: "signer", values?: undefined): string;
+  encodeFunctionData(functionFragment: 'signer', values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "tokensMigrationThreshold",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "totalSupply",
-    values?: undefined
+    functionFragment: 'tokensMigrationThreshold',
+    values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "transferOwnership",
-    values: [AddressLike]
-  ): string;
-  encodeFunctionData(functionFragment: "treasury", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "uniswapV2Router",
-    values?: undefined
+    functionFragment: 'totalSupply',
+    values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "usedSignatures",
-    values: [BytesLike]
+    functionFragment: 'transferOwnership',
+    values: [AddressLike],
+  ): string;
+  encodeFunctionData(functionFragment: 'treasury', values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: 'usedSignatures',
+    values: [BytesLike],
   ): string;
   encodeFunctionData(
-    functionFragment: "virtualCollateralReserves",
-    values?: undefined
+    functionFragment: 'virtualCollateralReserves',
+    values?: undefined,
   ): string;
   encodeFunctionData(
-    functionFragment: "virtualTokenReserves",
-    values?: undefined
+    functionFragment: 'virtualTokenReserves',
+    values?: undefined,
   ): string;
 
-  decodeFunctionResult(functionFragment: "buyExactIn", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "buyExactOut",
-    data: BytesLike
+    functionFragment: 'UNISWAP_V2_ROUTER',
+    data: BytesLike,
+  ): Result;
+  decodeFunctionResult(functionFragment: 'buyExactIn', data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: 'buyExactOut',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "createMoonshotToken",
-    data: BytesLike
+    functionFragment: 'createMoonshotToken',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "createMoonshotTokenAndBuy",
-    data: BytesLike
+    functionFragment: 'createMoonshotTokenAndBuy',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "dexFeeBasisPoints",
-    data: BytesLike
+    functionFragment: 'dexFeeBasisPoints',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "dexTreasury",
-    data: BytesLike
+    functionFragment: 'dexTreasury',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "feeBasisPoints",
-    data: BytesLike
+    functionFragment: 'feeBasisPoints',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "mcLowerLimit",
-    data: BytesLike
+    functionFragment: 'mcLowerLimit',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "mcUpperLimit",
-    data: BytesLike
+    functionFragment: 'mcUpperLimit',
+    data: BytesLike,
   ): Result;
-  decodeFunctionResult(functionFragment: "migrate", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'migrate', data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "migrationFeeFixed",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "moonshotTokens",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "poolCreationFee",
-    data: BytesLike
+    functionFragment: 'migrationFeeFixed',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "readyForMigration",
-    data: BytesLike
+    functionFragment: 'moonshotTokens',
+    data: BytesLike,
+  ): Result;
+  decodeFunctionResult(functionFragment: 'owner', data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: 'poolCreationFee',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "renounceOwnership",
-    data: BytesLike
+    functionFragment: 'readyForMigration',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "sellExactIn",
-    data: BytesLike
+    functionFragment: 'renounceOwnership',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "sellExactOut",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "setConfig", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "signer", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "tokensMigrationThreshold",
-    data: BytesLike
+    functionFragment: 'sellExactIn',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "totalSupply",
-    data: BytesLike
+    functionFragment: 'sellExactOut',
+    data: BytesLike,
+  ): Result;
+  decodeFunctionResult(functionFragment: 'setConfig', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'signer', data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: 'tokensMigrationThreshold',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "transferOwnership",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "treasury", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "uniswapV2Router",
-    data: BytesLike
+    functionFragment: 'totalSupply',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "usedSignatures",
-    data: BytesLike
+    functionFragment: 'transferOwnership',
+    data: BytesLike,
+  ): Result;
+  decodeFunctionResult(functionFragment: 'treasury', data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: 'usedSignatures',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "virtualCollateralReserves",
-    data: BytesLike
+    functionFragment: 'virtualCollateralReserves',
+    data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "virtualTokenReserves",
-    data: BytesLike
+    functionFragment: 'virtualTokenReserves',
+    data: BytesLike,
   ): Result;
 }
 
@@ -294,7 +293,7 @@ export namespace BuyExactInEvent {
     collateralAmount: BigNumberish,
     fee: BigNumberish,
     dexFee: BigNumberish,
-    curveProgressBps: BigNumberish
+    curveProgressBps: BigNumberish,
   ];
   export type OutputTuple = [
     buyer: string,
@@ -304,7 +303,7 @@ export namespace BuyExactInEvent {
     collateralAmount: bigint,
     fee: bigint,
     dexFee: bigint,
-    curveProgressBps: bigint
+    curveProgressBps: bigint,
   ];
   export interface OutputObject {
     buyer: string;
@@ -332,7 +331,7 @@ export namespace BuyExactOutEvent {
     refund: BigNumberish,
     fee: BigNumberish,
     dexFee: BigNumberish,
-    curveProgressBps: BigNumberish
+    curveProgressBps: BigNumberish,
   ];
   export type OutputTuple = [
     buyer: string,
@@ -343,7 +342,7 @@ export namespace BuyExactOutEvent {
     refund: bigint,
     fee: bigint,
     dexFee: bigint,
-    curveProgressBps: bigint
+    curveProgressBps: bigint,
   ];
   export interface OutputObject {
     buyer: string;
@@ -381,7 +380,7 @@ export namespace MigratedEvent {
     tokensToBurn: BigNumberish,
     collateralToMigrate: BigNumberish,
     migrationFee: BigNumberish,
-    pair: AddressLike
+    pair: AddressLike,
   ];
   export type OutputTuple = [
     token: string,
@@ -389,7 +388,7 @@ export namespace MigratedEvent {
     tokensToBurn: bigint,
     collateralToMigrate: bigint,
     migrationFee: bigint,
-    pair: string
+    pair: string,
   ];
   export interface OutputObject {
     token: string;
@@ -409,7 +408,7 @@ export namespace NewMoonshotTokenEvent {
   export type InputTuple = [
     addr: AddressLike,
     creator: AddressLike,
-    signature: BytesLike
+    signature: BytesLike,
   ];
   export type OutputTuple = [addr: string, creator: string, signature: string];
   export interface OutputObject {
@@ -432,7 +431,7 @@ export namespace NewMoonshotTokenAndBuyEvent {
     collateralAmount: BigNumberish,
     fee: BigNumberish,
     dexFee: BigNumberish,
-    curveProgressBps: BigNumberish
+    curveProgressBps: BigNumberish,
   ];
   export type OutputTuple = [
     addr: string,
@@ -442,7 +441,7 @@ export namespace NewMoonshotTokenAndBuyEvent {
     collateralAmount: bigint,
     fee: bigint,
     dexFee: bigint,
-    curveProgressBps: bigint
+    curveProgressBps: bigint,
   ];
   export interface OutputObject {
     addr: string;
@@ -482,7 +481,7 @@ export namespace SellExactInEvent {
     collateralAmount: BigNumberish,
     fee: BigNumberish,
     dexFee: BigNumberish,
-    curveProgressBps: BigNumberish
+    curveProgressBps: BigNumberish,
   ];
   export type OutputTuple = [
     seller: string,
@@ -492,7 +491,7 @@ export namespace SellExactInEvent {
     collateralAmount: bigint,
     fee: bigint,
     dexFee: bigint,
-    curveProgressBps: bigint
+    curveProgressBps: bigint,
   ];
   export interface OutputObject {
     seller: string;
@@ -519,7 +518,7 @@ export namespace SellExactOutEvent {
     collateralAmount: BigNumberish,
     fee: BigNumberish,
     dexFee: BigNumberish,
-    curveProgressBps: BigNumberish
+    curveProgressBps: BigNumberish,
   ];
   export type OutputTuple = [
     seller: string,
@@ -529,7 +528,7 @@ export namespace SellExactOutEvent {
     collateralAmount: bigint,
     fee: bigint,
     dexFee: bigint,
-    curveProgressBps: bigint
+    curveProgressBps: bigint,
   ];
   export interface OutputObject {
     seller: string;
@@ -561,8 +560,7 @@ export namespace SetConfigEvent {
     tokensMigrationThreshold: BigNumberish,
     treasury: AddressLike,
     dexTreasury: AddressLike,
-    uniswapV2Router: AddressLike,
-    signer: AddressLike
+    signer: AddressLike,
   ];
   export type OutputTuple = [
     totalSupply: bigint,
@@ -577,8 +575,7 @@ export namespace SetConfigEvent {
     tokensMigrationThreshold: bigint,
     treasury: string,
     dexTreasury: string,
-    uniswapV2Router: string,
-    signer: string
+    signer: string,
   ];
   export interface OutputObject {
     totalSupply: bigint;
@@ -593,7 +590,6 @@ export namespace SetConfigEvent {
     tokensMigrationThreshold: bigint;
     treasury: string;
     dexTreasury: string;
-    uniswapV2Router: string;
     signer: string;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
@@ -611,54 +607,56 @@ export interface MoonshotFactory extends BaseContract {
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEventLog<TCEvent>>>;
   queryFilter<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined
+    toBlock?: string | number | undefined,
   ): Promise<Array<TypedEventLog<TCEvent>>>;
 
   on<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
   on<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
 
   once<TCEvent extends TypedContractEvent>(
     event: TCEvent,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
   once<TCEvent extends TypedContractEvent>(
     filter: TypedDeferredTopicFilter<TCEvent>,
-    listener: TypedListener<TCEvent>
+    listener: TypedListener<TCEvent>,
   ): Promise<this>;
 
   listeners<TCEvent extends TypedContractEvent>(
-    event: TCEvent
+    event: TCEvent,
   ): Promise<Array<TypedListener<TCEvent>>>;
   listeners(eventName?: string): Promise<Array<Listener>>;
   removeAllListeners<TCEvent extends TypedContractEvent>(
-    event?: TCEvent
+    event?: TCEvent,
   ): Promise<this>;
+
+  UNISWAP_V2_ROUTER: TypedContractMethod<[], [string], 'view'>;
 
   buyExactIn: TypedContractMethod<
     [_token: AddressLike, _amountOutMin: BigNumberish],
     [void],
-    "payable"
+    'payable'
   >;
 
   buyExactOut: TypedContractMethod<
     [
       _token: AddressLike,
       _tokenAmount: BigNumberish,
-      _maxCollateralAmount: BigNumberish
+      _maxCollateralAmount: BigNumberish,
     ],
     [void],
-    "payable"
+    'payable'
   >;
 
   createMoonshotToken: TypedContractMethod<
@@ -666,10 +664,10 @@ export interface MoonshotFactory extends BaseContract {
       _name: string,
       _symbol: string,
       _nonce: BigNumberish,
-      _signature: BytesLike
+      _signature: BytesLike,
     ],
     [string],
-    "nonpayable"
+    'nonpayable'
   >;
 
   createMoonshotTokenAndBuy: TypedContractMethod<
@@ -678,58 +676,58 @@ export interface MoonshotFactory extends BaseContract {
       _symbol: string,
       _nonce: BigNumberish,
       _tokenAmountMin: BigNumberish,
-      _signature: BytesLike
+      _signature: BytesLike,
     ],
     [string],
-    "payable"
+    'payable'
   >;
 
-  dexFeeBasisPoints: TypedContractMethod<[], [bigint], "view">;
+  dexFeeBasisPoints: TypedContractMethod<[], [bigint], 'view'>;
 
-  dexTreasury: TypedContractMethod<[], [string], "view">;
+  dexTreasury: TypedContractMethod<[], [string], 'view'>;
 
-  feeBasisPoints: TypedContractMethod<[], [bigint], "view">;
+  feeBasisPoints: TypedContractMethod<[], [bigint], 'view'>;
 
-  mcLowerLimit: TypedContractMethod<[], [bigint], "view">;
+  mcLowerLimit: TypedContractMethod<[], [bigint], 'view'>;
 
-  mcUpperLimit: TypedContractMethod<[], [bigint], "view">;
+  mcUpperLimit: TypedContractMethod<[], [bigint], 'view'>;
 
-  migrate: TypedContractMethod<[_token: AddressLike], [void], "nonpayable">;
+  migrate: TypedContractMethod<[_token: AddressLike], [void], 'nonpayable'>;
 
-  migrationFeeFixed: TypedContractMethod<[], [bigint], "view">;
+  migrationFeeFixed: TypedContractMethod<[], [bigint], 'view'>;
 
-  moonshotTokens: TypedContractMethod<[arg0: BigNumberish], [string], "view">;
+  moonshotTokens: TypedContractMethod<[arg0: BigNumberish], [string], 'view'>;
 
-  owner: TypedContractMethod<[], [string], "view">;
+  owner: TypedContractMethod<[], [string], 'view'>;
 
-  poolCreationFee: TypedContractMethod<[], [bigint], "view">;
+  poolCreationFee: TypedContractMethod<[], [bigint], 'view'>;
 
   readyForMigration: TypedContractMethod<
     [arg0: AddressLike],
     [boolean],
-    "view"
+    'view'
   >;
 
-  renounceOwnership: TypedContractMethod<[], [void], "nonpayable">;
+  renounceOwnership: TypedContractMethod<[], [void], 'nonpayable'>;
 
   sellExactIn: TypedContractMethod<
     [
       _token: AddressLike,
       _tokenAmount: BigNumberish,
-      _amountCollateralMin: BigNumberish
+      _amountCollateralMin: BigNumberish,
     ],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
   sellExactOut: TypedContractMethod<
     [
       _token: AddressLike,
       _tokenAmountMax: BigNumberish,
-      _amountCollateral: BigNumberish
+      _amountCollateral: BigNumberish,
     ],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
   setConfig: TypedContractMethod<
@@ -746,140 +744,140 @@ export interface MoonshotFactory extends BaseContract {
       _tokensMigrationThreshold: BigNumberish,
       _treasury: AddressLike,
       _dexTreasury: AddressLike,
-      _uniswapV2Router: AddressLike,
-      _signer: AddressLike
+      _signer: AddressLike,
     ],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
-  tokensMigrationThreshold: TypedContractMethod<[], [bigint], "view">;
+  tokensMigrationThreshold: TypedContractMethod<[], [bigint], 'view'>;
 
-  totalSupply: TypedContractMethod<[], [bigint], "view">;
+  totalSupply: TypedContractMethod<[], [bigint], 'view'>;
 
   transferOwnership: TypedContractMethod<
     [newOwner: AddressLike],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
 
-  treasury: TypedContractMethod<[], [string], "view">;
+  treasury: TypedContractMethod<[], [string], 'view'>;
 
-  uniswapV2Router: TypedContractMethod<[], [string], "view">;
+  usedSignatures: TypedContractMethod<[arg0: BytesLike], [boolean], 'view'>;
 
-  usedSignatures: TypedContractMethod<[arg0: BytesLike], [boolean], "view">;
+  virtualCollateralReserves: TypedContractMethod<[], [bigint], 'view'>;
 
-  virtualCollateralReserves: TypedContractMethod<[], [bigint], "view">;
-
-  virtualTokenReserves: TypedContractMethod<[], [bigint], "view">;
+  virtualTokenReserves: TypedContractMethod<[], [bigint], 'view'>;
 
   getFunction<T extends ContractMethod = ContractMethod>(
-    key: string | FunctionFragment
+    key: string | FunctionFragment,
   ): T;
 
   getFunction(
-    nameOrSignature: "buyExactIn"
+    nameOrSignature: 'UNISWAP_V2_ROUTER',
+  ): TypedContractMethod<[], [string], 'view'>;
+  getFunction(
+    nameOrSignature: 'buyExactIn',
   ): TypedContractMethod<
     [_token: AddressLike, _amountOutMin: BigNumberish],
     [void],
-    "payable"
+    'payable'
   >;
   getFunction(
-    nameOrSignature: "buyExactOut"
+    nameOrSignature: 'buyExactOut',
   ): TypedContractMethod<
     [
       _token: AddressLike,
       _tokenAmount: BigNumberish,
-      _maxCollateralAmount: BigNumberish
+      _maxCollateralAmount: BigNumberish,
     ],
     [void],
-    "payable"
+    'payable'
   >;
   getFunction(
-    nameOrSignature: "createMoonshotToken"
+    nameOrSignature: 'createMoonshotToken',
   ): TypedContractMethod<
     [
       _name: string,
       _symbol: string,
       _nonce: BigNumberish,
-      _signature: BytesLike
+      _signature: BytesLike,
     ],
     [string],
-    "nonpayable"
+    'nonpayable'
   >;
   getFunction(
-    nameOrSignature: "createMoonshotTokenAndBuy"
+    nameOrSignature: 'createMoonshotTokenAndBuy',
   ): TypedContractMethod<
     [
       _name: string,
       _symbol: string,
       _nonce: BigNumberish,
       _tokenAmountMin: BigNumberish,
-      _signature: BytesLike
+      _signature: BytesLike,
     ],
     [string],
-    "payable"
+    'payable'
   >;
   getFunction(
-    nameOrSignature: "dexFeeBasisPoints"
-  ): TypedContractMethod<[], [bigint], "view">;
+    nameOrSignature: 'dexFeeBasisPoints',
+  ): TypedContractMethod<[], [bigint], 'view'>;
   getFunction(
-    nameOrSignature: "dexTreasury"
-  ): TypedContractMethod<[], [string], "view">;
+    nameOrSignature: 'dexTreasury',
+  ): TypedContractMethod<[], [string], 'view'>;
   getFunction(
-    nameOrSignature: "feeBasisPoints"
-  ): TypedContractMethod<[], [bigint], "view">;
+    nameOrSignature: 'feeBasisPoints',
+  ): TypedContractMethod<[], [bigint], 'view'>;
   getFunction(
-    nameOrSignature: "mcLowerLimit"
-  ): TypedContractMethod<[], [bigint], "view">;
+    nameOrSignature: 'mcLowerLimit',
+  ): TypedContractMethod<[], [bigint], 'view'>;
   getFunction(
-    nameOrSignature: "mcUpperLimit"
-  ): TypedContractMethod<[], [bigint], "view">;
+    nameOrSignature: 'mcUpperLimit',
+  ): TypedContractMethod<[], [bigint], 'view'>;
   getFunction(
-    nameOrSignature: "migrate"
-  ): TypedContractMethod<[_token: AddressLike], [void], "nonpayable">;
+    nameOrSignature: 'migrate',
+  ): TypedContractMethod<[_token: AddressLike], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "migrationFeeFixed"
-  ): TypedContractMethod<[], [bigint], "view">;
+    nameOrSignature: 'migrationFeeFixed',
+  ): TypedContractMethod<[], [bigint], 'view'>;
   getFunction(
-    nameOrSignature: "moonshotTokens"
-  ): TypedContractMethod<[arg0: BigNumberish], [string], "view">;
+    nameOrSignature: 'moonshotTokens',
+  ): TypedContractMethod<[arg0: BigNumberish], [string], 'view'>;
   getFunction(
-    nameOrSignature: "owner"
-  ): TypedContractMethod<[], [string], "view">;
+    nameOrSignature: 'owner',
+  ): TypedContractMethod<[], [string], 'view'>;
   getFunction(
-    nameOrSignature: "poolCreationFee"
-  ): TypedContractMethod<[], [bigint], "view">;
+    nameOrSignature: 'poolCreationFee',
+  ): TypedContractMethod<[], [bigint], 'view'>;
   getFunction(
-    nameOrSignature: "readyForMigration"
-  ): TypedContractMethod<[arg0: AddressLike], [boolean], "view">;
+    nameOrSignature: 'readyForMigration',
+  ): TypedContractMethod<[arg0: AddressLike], [boolean], 'view'>;
   getFunction(
-    nameOrSignature: "renounceOwnership"
-  ): TypedContractMethod<[], [void], "nonpayable">;
+    nameOrSignature: 'renounceOwnership',
+  ): TypedContractMethod<[], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "sellExactIn"
+    nameOrSignature: 'sellExactIn',
   ): TypedContractMethod<
     [
       _token: AddressLike,
       _tokenAmount: BigNumberish,
-      _amountCollateralMin: BigNumberish
+      _amountCollateralMin: BigNumberish,
     ],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
   getFunction(
-    nameOrSignature: "sellExactOut"
+    nameOrSignature: 'sellExactOut',
   ): TypedContractMethod<
     [
       _token: AddressLike,
       _tokenAmountMax: BigNumberish,
-      _amountCollateral: BigNumberish
+      _amountCollateral: BigNumberish,
     ],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
   getFunction(
-    nameOrSignature: "setConfig"
+    nameOrSignature: 'setConfig',
   ): TypedContractMethod<
     [
       _totalSupply: BigNumberish,
@@ -894,105 +892,101 @@ export interface MoonshotFactory extends BaseContract {
       _tokensMigrationThreshold: BigNumberish,
       _treasury: AddressLike,
       _dexTreasury: AddressLike,
-      _uniswapV2Router: AddressLike,
-      _signer: AddressLike
+      _signer: AddressLike,
     ],
     [void],
-    "nonpayable"
+    'nonpayable'
   >;
   getFunction(
-    nameOrSignature: "signer"
-  ): TypedContractMethod<[], [string], "view">;
+    nameOrSignature: 'signer',
+  ): TypedContractMethod<[], [string], 'view'>;
   getFunction(
-    nameOrSignature: "tokensMigrationThreshold"
-  ): TypedContractMethod<[], [bigint], "view">;
+    nameOrSignature: 'tokensMigrationThreshold',
+  ): TypedContractMethod<[], [bigint], 'view'>;
   getFunction(
-    nameOrSignature: "totalSupply"
-  ): TypedContractMethod<[], [bigint], "view">;
+    nameOrSignature: 'totalSupply',
+  ): TypedContractMethod<[], [bigint], 'view'>;
   getFunction(
-    nameOrSignature: "transferOwnership"
-  ): TypedContractMethod<[newOwner: AddressLike], [void], "nonpayable">;
+    nameOrSignature: 'transferOwnership',
+  ): TypedContractMethod<[newOwner: AddressLike], [void], 'nonpayable'>;
   getFunction(
-    nameOrSignature: "treasury"
-  ): TypedContractMethod<[], [string], "view">;
+    nameOrSignature: 'treasury',
+  ): TypedContractMethod<[], [string], 'view'>;
   getFunction(
-    nameOrSignature: "uniswapV2Router"
-  ): TypedContractMethod<[], [string], "view">;
+    nameOrSignature: 'usedSignatures',
+  ): TypedContractMethod<[arg0: BytesLike], [boolean], 'view'>;
   getFunction(
-    nameOrSignature: "usedSignatures"
-  ): TypedContractMethod<[arg0: BytesLike], [boolean], "view">;
+    nameOrSignature: 'virtualCollateralReserves',
+  ): TypedContractMethod<[], [bigint], 'view'>;
   getFunction(
-    nameOrSignature: "virtualCollateralReserves"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "virtualTokenReserves"
-  ): TypedContractMethod<[], [bigint], "view">;
+    nameOrSignature: 'virtualTokenReserves',
+  ): TypedContractMethod<[], [bigint], 'view'>;
 
   getEvent(
-    key: "BuyExactIn"
+    key: 'BuyExactIn',
   ): TypedContractEvent<
     BuyExactInEvent.InputTuple,
     BuyExactInEvent.OutputTuple,
     BuyExactInEvent.OutputObject
   >;
   getEvent(
-    key: "BuyExactOut"
+    key: 'BuyExactOut',
   ): TypedContractEvent<
     BuyExactOutEvent.InputTuple,
     BuyExactOutEvent.OutputTuple,
     BuyExactOutEvent.OutputObject
   >;
   getEvent(
-    key: "MarketcapReached"
+    key: 'MarketcapReached',
   ): TypedContractEvent<
     MarketcapReachedEvent.InputTuple,
     MarketcapReachedEvent.OutputTuple,
     MarketcapReachedEvent.OutputObject
   >;
   getEvent(
-    key: "Migrated"
+    key: 'Migrated',
   ): TypedContractEvent<
     MigratedEvent.InputTuple,
     MigratedEvent.OutputTuple,
     MigratedEvent.OutputObject
   >;
   getEvent(
-    key: "NewMoonshotToken"
+    key: 'NewMoonshotToken',
   ): TypedContractEvent<
     NewMoonshotTokenEvent.InputTuple,
     NewMoonshotTokenEvent.OutputTuple,
     NewMoonshotTokenEvent.OutputObject
   >;
   getEvent(
-    key: "NewMoonshotTokenAndBuy"
+    key: 'NewMoonshotTokenAndBuy',
   ): TypedContractEvent<
     NewMoonshotTokenAndBuyEvent.InputTuple,
     NewMoonshotTokenAndBuyEvent.OutputTuple,
     NewMoonshotTokenAndBuyEvent.OutputObject
   >;
   getEvent(
-    key: "OwnershipTransferred"
+    key: 'OwnershipTransferred',
   ): TypedContractEvent<
     OwnershipTransferredEvent.InputTuple,
     OwnershipTransferredEvent.OutputTuple,
     OwnershipTransferredEvent.OutputObject
   >;
   getEvent(
-    key: "SellExactIn"
+    key: 'SellExactIn',
   ): TypedContractEvent<
     SellExactInEvent.InputTuple,
     SellExactInEvent.OutputTuple,
     SellExactInEvent.OutputObject
   >;
   getEvent(
-    key: "SellExactOut"
+    key: 'SellExactOut',
   ): TypedContractEvent<
     SellExactOutEvent.InputTuple,
     SellExactOutEvent.OutputTuple,
     SellExactOutEvent.OutputObject
   >;
   getEvent(
-    key: "SetConfig"
+    key: 'SetConfig',
   ): TypedContractEvent<
     SetConfigEvent.InputTuple,
     SetConfigEvent.OutputTuple,
@@ -1000,7 +994,7 @@ export interface MoonshotFactory extends BaseContract {
   >;
 
   filters: {
-    "BuyExactIn(address,address,uint256,uint256,uint256,uint256,uint256,uint256)": TypedContractEvent<
+    'BuyExactIn(address,address,uint256,uint256,uint256,uint256,uint256,uint256)': TypedContractEvent<
       BuyExactInEvent.InputTuple,
       BuyExactInEvent.OutputTuple,
       BuyExactInEvent.OutputObject
@@ -1011,7 +1005,7 @@ export interface MoonshotFactory extends BaseContract {
       BuyExactInEvent.OutputObject
     >;
 
-    "BuyExactOut(address,address,uint256,uint256,uint256,uint256,uint256,uint256,uint256)": TypedContractEvent<
+    'BuyExactOut(address,address,uint256,uint256,uint256,uint256,uint256,uint256,uint256)': TypedContractEvent<
       BuyExactOutEvent.InputTuple,
       BuyExactOutEvent.OutputTuple,
       BuyExactOutEvent.OutputObject
@@ -1022,7 +1016,7 @@ export interface MoonshotFactory extends BaseContract {
       BuyExactOutEvent.OutputObject
     >;
 
-    "MarketcapReached(address)": TypedContractEvent<
+    'MarketcapReached(address)': TypedContractEvent<
       MarketcapReachedEvent.InputTuple,
       MarketcapReachedEvent.OutputTuple,
       MarketcapReachedEvent.OutputObject
@@ -1033,7 +1027,7 @@ export interface MoonshotFactory extends BaseContract {
       MarketcapReachedEvent.OutputObject
     >;
 
-    "Migrated(address,uint256,uint256,uint256,uint256,address)": TypedContractEvent<
+    'Migrated(address,uint256,uint256,uint256,uint256,address)': TypedContractEvent<
       MigratedEvent.InputTuple,
       MigratedEvent.OutputTuple,
       MigratedEvent.OutputObject
@@ -1044,7 +1038,7 @@ export interface MoonshotFactory extends BaseContract {
       MigratedEvent.OutputObject
     >;
 
-    "NewMoonshotToken(address,address,bytes)": TypedContractEvent<
+    'NewMoonshotToken(address,address,bytes)': TypedContractEvent<
       NewMoonshotTokenEvent.InputTuple,
       NewMoonshotTokenEvent.OutputTuple,
       NewMoonshotTokenEvent.OutputObject
@@ -1055,7 +1049,7 @@ export interface MoonshotFactory extends BaseContract {
       NewMoonshotTokenEvent.OutputObject
     >;
 
-    "NewMoonshotTokenAndBuy(address,address,bytes,uint256,uint256,uint256,uint256,uint256)": TypedContractEvent<
+    'NewMoonshotTokenAndBuy(address,address,bytes,uint256,uint256,uint256,uint256,uint256)': TypedContractEvent<
       NewMoonshotTokenAndBuyEvent.InputTuple,
       NewMoonshotTokenAndBuyEvent.OutputTuple,
       NewMoonshotTokenAndBuyEvent.OutputObject
@@ -1066,7 +1060,7 @@ export interface MoonshotFactory extends BaseContract {
       NewMoonshotTokenAndBuyEvent.OutputObject
     >;
 
-    "OwnershipTransferred(address,address)": TypedContractEvent<
+    'OwnershipTransferred(address,address)': TypedContractEvent<
       OwnershipTransferredEvent.InputTuple,
       OwnershipTransferredEvent.OutputTuple,
       OwnershipTransferredEvent.OutputObject
@@ -1077,7 +1071,7 @@ export interface MoonshotFactory extends BaseContract {
       OwnershipTransferredEvent.OutputObject
     >;
 
-    "SellExactIn(address,address,uint256,uint256,uint256,uint256,uint256,uint256)": TypedContractEvent<
+    'SellExactIn(address,address,uint256,uint256,uint256,uint256,uint256,uint256)': TypedContractEvent<
       SellExactInEvent.InputTuple,
       SellExactInEvent.OutputTuple,
       SellExactInEvent.OutputObject
@@ -1088,7 +1082,7 @@ export interface MoonshotFactory extends BaseContract {
       SellExactInEvent.OutputObject
     >;
 
-    "SellExactOut(address,address,uint256,uint256,uint256,uint256,uint256,uint256)": TypedContractEvent<
+    'SellExactOut(address,address,uint256,uint256,uint256,uint256,uint256,uint256)': TypedContractEvent<
       SellExactOutEvent.InputTuple,
       SellExactOutEvent.OutputTuple,
       SellExactOutEvent.OutputObject
@@ -1099,7 +1093,7 @@ export interface MoonshotFactory extends BaseContract {
       SellExactOutEvent.OutputObject
     >;
 
-    "SetConfig(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,address,address,address,address)": TypedContractEvent<
+    'SetConfig(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,address,address,address)': TypedContractEvent<
       SetConfigEvent.InputTuple,
       SetConfigEvent.OutputTuple,
       SetConfigEvent.OutputObject
