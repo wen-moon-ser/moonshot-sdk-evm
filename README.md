@@ -73,7 +73,7 @@ import { JsonRpcProvider } from 'ethers';
 import { Moonshot, Token, FixedSide } from '@wen-moon-ser/moonshot-sdk-evm';
 
 export const sellTx = async (): Promise<void> => {
-  console.log('--- Buying token example ---');
+  console.log('--- Selling token example ---');
 
   const rpcUrl = 'https://base-sepolia.gateway.tenderly.co'
 
@@ -90,7 +90,7 @@ export const sellTx = async (): Promise<void> => {
     moonshot,
   });
 
-  const tokenAmount = 10000n * 10n ** 18n; // Buy 10k tokens
+  const tokenAmount = 10000n * 10n ** 18n; // sell 10k tokens
   const collateralAmount = await token.getCollateralAmountByTokens({
     tokenAmount,
     tradeDirection: 'SELL',
@@ -101,7 +101,7 @@ export const sellTx = async (): Promise<void> => {
     tokenAmount,
     collateralAmount,
     tradeDirection: 'SELL',
-    fixedSide: FixedSide.OUT,
+    fixedSide: FixedSide.IN,
   });
 
   tx.from = await signer.getAddress();
