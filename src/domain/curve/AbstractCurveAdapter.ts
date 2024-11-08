@@ -10,7 +10,7 @@ import { getCurveAccount } from '../../evm/utils/getCurveAccount';
 import { calculateCurvePosition } from '../../evm/utils/calculateCurvePosition';
 
 export abstract class AbstractCurveAdapter {
-  constructor(protected token: MoonshotToken) {}
+  constructor(protected token: MoonshotToken) { }
 
   abstract getCollateralAmountByTokens(
     options: GetCollateralAmountOptions,

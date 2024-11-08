@@ -21,7 +21,7 @@ import type {
   TypedLogDescription,
   TypedListener,
   TypedContractMethod,
-} from "./common";
+} from "../common";
 
 export declare namespace IMoonshotToken {
   export type ConstructorParamsStruct = {
@@ -83,6 +83,7 @@ export declare namespace IMoonshotToken {
 export interface MoonshotTokenInterface extends Interface {
   getFunction(
     nameOrSignature:
+      | "MAX_BPS"
       | "allowance"
       | "approve"
       | "balanceOf"
@@ -121,11 +122,13 @@ export interface MoonshotTokenInterface extends Interface {
       | "treasury"
       | "uniswapV2Router"
       | "virtualCollateralReserves"
+      | "virtualCollateralReservesInitial"
       | "virtualTokenReserves"
   ): FunctionFragment;
 
   getEvent(nameOrSignatureOrTopic: "Approval" | "Transfer"): EventFragment;
 
+  encodeFunctionData(functionFragment: "MAX_BPS", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "allowance",
     values: [AddressLike, AddressLike]
@@ -243,10 +246,15 @@ export interface MoonshotTokenInterface extends Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "virtualCollateralReservesInitial",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "virtualTokenReserves",
     values?: undefined
   ): string;
 
+  decodeFunctionResult(functionFragment: "MAX_BPS", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "allowance", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
@@ -346,6 +354,10 @@ export interface MoonshotTokenInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "virtualCollateralReservesInitial",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "virtualTokenReserves",
     data: BytesLike
   ): Result;
@@ -429,6 +441,8 @@ export interface MoonshotToken extends BaseContract {
   removeAllListeners<TCEvent extends TypedContractEvent>(
     event?: TCEvent
   ): Promise<this>;
+
+  MAX_BPS: TypedContractMethod<[], [bigint], "view">;
 
   allowance: TypedContractMethod<
     [owner: AddressLike, spender: AddressLike],
@@ -595,12 +609,17 @@ export interface MoonshotToken extends BaseContract {
 
   virtualCollateralReserves: TypedContractMethod<[], [bigint], "view">;
 
+  virtualCollateralReservesInitial: TypedContractMethod<[], [bigint], "view">;
+
   virtualTokenReserves: TypedContractMethod<[], [bigint], "view">;
 
   getFunction<T extends ContractMethod = ContractMethod>(
     key: string | FunctionFragment
   ): T;
 
+  getFunction(
+    nameOrSignature: "MAX_BPS"
+  ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "allowance"
   ): TypedContractMethod<
@@ -803,6 +822,9 @@ export interface MoonshotToken extends BaseContract {
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
     nameOrSignature: "virtualCollateralReserves"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "virtualCollateralReservesInitial"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "virtualTokenReserves"

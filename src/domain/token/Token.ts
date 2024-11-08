@@ -40,7 +40,10 @@ export class Token {
   }
 
   static async create(options: InitTokenOptions): Promise<Token> {
-    const token = MoonshotToken__factory.connect(options.tokenAddress);
+    const token = MoonshotToken__factory.connect(
+      options.tokenAddress,
+      options.provider,
+    );
     const tokenCurveAdapterType = await token.curveType();
 
     let tokenCurveAdapter: AbstractCurveAdapter;
