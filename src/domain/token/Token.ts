@@ -16,10 +16,7 @@ import { getCurveAccount } from '../../evm/utils/getCurveAccount';
 import { InitTokenOptions } from './InitTokenOptions';
 import { FixedSide } from './FixedSide';
 import { Moonshot } from '../moonshot';
-import {
-  BASE_MAINNET_ADDRESS,
-  BASE_SEPOLIA_ADDRESS,
-} from '../moonshot/Addresses';
+import { CurveType } from '../curve/CurveTypes';
 
 export class Token {
   private tokenAddress: string;
@@ -47,12 +44,12 @@ export class Token {
       options.tokenAddress,
       options.provider,
     );
+    const tokenCurveAdapterType = await token.curveType();
 
     let tokenCurveAdapter: AbstractCurveAdapter;
     if (
-      (await options.moonshot.getFactory().getAddress()) ==
-      BASE_SEPOLIA_ADDRESS ||
-      (await options.moonshot.getFactory().getAddress()) == BASE_MAINNET_ADDRESS
+      tokenCurveAdapterType.toString() ==
+      CurveType.ConstantProductCurveV1.toString()
     ) {
       tokenCurveAdapter = new BaseConstantProductCurveV1Adapter(token);
     } else {

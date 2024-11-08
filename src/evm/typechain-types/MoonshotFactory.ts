@@ -21,11 +21,12 @@ import type {
   TypedLogDescription,
   TypedListener,
   TypedContractMethod,
-} from "./common";
+} from "../common";
 
 export interface MoonshotFactoryInterface extends Interface {
   getFunction(
     nameOrSignature:
+      | "UNISWAP_V2_ROUTER"
       | "buyExactIn"
       | "buyExactOut"
       | "createMoonshotToken"
@@ -50,7 +51,6 @@ export interface MoonshotFactoryInterface extends Interface {
       | "totalSupply"
       | "transferOwnership"
       | "treasury"
-      | "uniswapV2Router"
       | "usedSignatures"
       | "virtualCollateralReserves"
       | "virtualTokenReserves"
@@ -70,6 +70,10 @@ export interface MoonshotFactoryInterface extends Interface {
       | "SetConfig"
   ): EventFragment;
 
+  encodeFunctionData(
+    functionFragment: "UNISWAP_V2_ROUTER",
+    values?: undefined
+  ): string;
   encodeFunctionData(
     functionFragment: "buyExactIn",
     values: [AddressLike, BigNumberish]
@@ -154,7 +158,6 @@ export interface MoonshotFactoryInterface extends Interface {
       BigNumberish,
       AddressLike,
       AddressLike,
-      AddressLike,
       AddressLike
     ]
   ): string;
@@ -173,10 +176,6 @@ export interface MoonshotFactoryInterface extends Interface {
   ): string;
   encodeFunctionData(functionFragment: "treasury", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "uniswapV2Router",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
     functionFragment: "usedSignatures",
     values: [BytesLike]
   ): string;
@@ -189,6 +188,10 @@ export interface MoonshotFactoryInterface extends Interface {
     values?: undefined
   ): string;
 
+  decodeFunctionResult(
+    functionFragment: "UNISWAP_V2_ROUTER",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "buyExactIn", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "buyExactOut",
@@ -267,10 +270,6 @@ export interface MoonshotFactoryInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "treasury", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "uniswapV2Router",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(
     functionFragment: "usedSignatures",
     data: BytesLike
@@ -561,7 +560,6 @@ export namespace SetConfigEvent {
     tokensMigrationThreshold: BigNumberish,
     treasury: AddressLike,
     dexTreasury: AddressLike,
-    uniswapV2Router: AddressLike,
     signer: AddressLike
   ];
   export type OutputTuple = [
@@ -577,7 +575,6 @@ export namespace SetConfigEvent {
     tokensMigrationThreshold: bigint,
     treasury: string,
     dexTreasury: string,
-    uniswapV2Router: string,
     signer: string
   ];
   export interface OutputObject {
@@ -593,7 +590,6 @@ export namespace SetConfigEvent {
     tokensMigrationThreshold: bigint;
     treasury: string;
     dexTreasury: string;
-    uniswapV2Router: string;
     signer: string;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
@@ -644,6 +640,8 @@ export interface MoonshotFactory extends BaseContract {
   removeAllListeners<TCEvent extends TypedContractEvent>(
     event?: TCEvent
   ): Promise<this>;
+
+  UNISWAP_V2_ROUTER: TypedContractMethod<[], [string], "view">;
 
   buyExactIn: TypedContractMethod<
     [_token: AddressLike, _amountOutMin: BigNumberish],
@@ -746,7 +744,6 @@ export interface MoonshotFactory extends BaseContract {
       _tokensMigrationThreshold: BigNumberish,
       _treasury: AddressLike,
       _dexTreasury: AddressLike,
-      _uniswapV2Router: AddressLike,
       _signer: AddressLike
     ],
     [void],
@@ -765,8 +762,6 @@ export interface MoonshotFactory extends BaseContract {
 
   treasury: TypedContractMethod<[], [string], "view">;
 
-  uniswapV2Router: TypedContractMethod<[], [string], "view">;
-
   usedSignatures: TypedContractMethod<[arg0: BytesLike], [boolean], "view">;
 
   virtualCollateralReserves: TypedContractMethod<[], [bigint], "view">;
@@ -777,6 +772,9 @@ export interface MoonshotFactory extends BaseContract {
     key: string | FunctionFragment
   ): T;
 
+  getFunction(
+    nameOrSignature: "UNISWAP_V2_ROUTER"
+  ): TypedContractMethod<[], [string], "view">;
   getFunction(
     nameOrSignature: "buyExactIn"
   ): TypedContractMethod<
@@ -894,7 +892,6 @@ export interface MoonshotFactory extends BaseContract {
       _tokensMigrationThreshold: BigNumberish,
       _treasury: AddressLike,
       _dexTreasury: AddressLike,
-      _uniswapV2Router: AddressLike,
       _signer: AddressLike
     ],
     [void],
@@ -914,9 +911,6 @@ export interface MoonshotFactory extends BaseContract {
   ): TypedContractMethod<[newOwner: AddressLike], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "treasury"
-  ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "uniswapV2Router"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
     nameOrSignature: "usedSignatures"
@@ -1099,7 +1093,7 @@ export interface MoonshotFactory extends BaseContract {
       SellExactOutEvent.OutputObject
     >;
 
-    "SetConfig(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,address,address,address,address)": TypedContractEvent<
+    "SetConfig(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,address,address,address)": TypedContractEvent<
       SetConfigEvent.InputTuple,
       SetConfigEvent.OutputTuple,
       SetConfigEvent.OutputObject
