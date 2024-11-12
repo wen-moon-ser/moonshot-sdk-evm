@@ -72,7 +72,7 @@ import { Wallet } from 'ethers';
 import { JsonRpcProvider } from 'ethers';
 import { Moonshot, Token, FixedSide } from '@wen-moon-ser/moonshot-sdk-evm';
 
-export const buyTx = async (): Promise<void> => {
+export const sellTx = async (): Promise<void> => {
   console.log('--- Buying token example ---');
 
   const rpcUrl = 'https://base-sepolia.gateway.tenderly.co'
