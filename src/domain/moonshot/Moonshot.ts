@@ -30,10 +30,7 @@ export class Moonshot {
       this.signerWithProvider,
     );
 
-    this.apiAdapter = new MoonshotApiAdapter(
-      options.authToken ?? '',
-      options.env,
-    );
+    this.apiAdapter = new MoonshotApiAdapter(options.env,);
   }
 
   async prepareMintTx(
