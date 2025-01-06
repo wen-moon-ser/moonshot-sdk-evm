@@ -9,6 +9,8 @@ import { MoonshotInitOptions } from './MoonshotInitOptions';
 import { MintTokenPrepareV1Response } from '../../infra/moonshot-api/MintTokenPrepareV1Response';
 import { PrepareMintTxOptions } from './PrepareMintTxOptions';
 import { MoonshotApiAdapter } from '../../infra/moonshot-api';
+import { SubmitMintTxOptions } from '../../infra/moonshot-api/SubmitMintTxOptions';
+import { SubmitMintTxResponse } from '../../infra/moonshot-api/SubmitMintTxResponse';
 
 export class Moonshot {
   private factory: MoonshotFactory;
@@ -30,7 +32,7 @@ export class Moonshot {
       this.signerWithProvider,
     );
 
-    this.apiAdapter = new MoonshotApiAdapter(options.env,);
+    this.apiAdapter = new MoonshotApiAdapter(options.env);
   }
 
   async prepareMintTx(
@@ -40,6 +42,16 @@ export class Moonshot {
       ...options,
       creatorId: options.creator,
     });
+  }
+
+  async submitMintTx(
+    options: SubmitMintTxOptions,
+  ): Promise<SubmitMintTxResponse> {
+    const res = await this.apiAdapter.submitMint(options.tokenId, options);
+    return {
+      txSignature: res.txnId,
+      status: res.status,
+    };
   }
 
   async buyExactOut(

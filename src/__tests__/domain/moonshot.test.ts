@@ -1,10 +1,7 @@
-import { Environment, Moonshot } from '../domain';
+import { Environment, Moonshot } from '../../domain';
 import { CurveType, MigrationDex } from '@heliofi/launchpad-common';
 import 'dotenv/config';
 import { JsonRpcProvider, Wallet } from 'ethers';
-import { apiClient } from '../infra/api-client/apiClient';
-import { MintTokenPrepareV1Response } from '../infra/moonshot-api/MintTokenPrepareV1Response';
-import { MoonshotApiChainId } from '../infra/moonshot-api/MoonshotApiChainId';
 
 jest.setTimeout(60000);
 
@@ -26,9 +23,7 @@ describe('Moonshot', () => {
     });
   });
 
-
   it('should prepare a token mint', async () => {
-    console.log('running test');
     const prepMint = await moonshot.prepareMintTx({
       creator: await signer.getAddress(),
       name: 'TEST_TOKEN',
@@ -39,10 +34,31 @@ describe('Moonshot', () => {
       description: 'TEST_TOKEN',
       links: [{ url: 'https://x.com', label: 'x handle' }],
       banner: mockImg,
+      tokenAmount: '10000000',
     });
+
+    console.log(prepMint);
 
     expect(prepMint.token).toBeDefined();
     expect(prepMint.draftTokenId).toBeDefined();
     expect(prepMint.transaction).toBeDefined();
+
+    const signedTx = await signer.signTransaction({
+      data: prepMint.transaction,
+      from: await signer.getAddress(),
+    });
+
+    console.log(signedTx);
+
+    try {
+      const res = await moonshot.submitMintTx({
+        token: prepMint.token,
+        signedTransaction: signedTx,
+        tokenId: prepMint.draftTokenId,
+      });
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
   });
 });

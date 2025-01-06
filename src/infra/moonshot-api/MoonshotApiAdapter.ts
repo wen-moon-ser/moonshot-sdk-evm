@@ -2,11 +2,12 @@ import { Environment } from '../../domain';
 import { MintTokenPrepareV1Request } from './MintTokenPrepareV1Request';
 import { MintTokenPrepareV1Response } from './MintTokenPrepareV1Response';
 import { MoonshotApiChainId } from './MoonshotApiChainId';
-import { Axios } from 'axios';
-import { apiClient } from '../api-client/apiClient';
+import { MintTokenSubmitV1Request } from './MintTokenSubmitV1Request';
+import { MintTokenSubmitV1Response } from './MintTokenSubmitV1Response';
+import { ApiClient } from '../http';
 
 export class MoonshotApiAdapter {
-  private apiClient: Axios;
+  private apiClient: ApiClient;
 
   private env: Environment;
 
@@ -17,28 +18,33 @@ export class MoonshotApiAdapter {
         : 'https://api-devnet.moonshot.cc';
 
     this.env = environment;
-    this.apiClient = apiClient(apiBasePath);
+    this.apiClient = new ApiClient({ apiBasePath });
   }
 
   async prepareMint(
     prepareBuyDto: Omit<MintTokenPrepareV1Request, 'chainId'>,
   ): Promise<MintTokenPrepareV1Response> {
-    try {
-      const { data } = await this.apiClient.post<MintTokenPrepareV1Response>(
-        `/tokens/v1`,
-        {
-          ...prepareBuyDto,
-          chainId:
-            this.env === Environment.MAINNET
-              ? MoonshotApiChainId.BASE_MAINNET
-              : MoonshotApiChainId.BASE_TESTNET,
-        },
-      );
+    const chainId =
+      this.env === Environment.MAINNET
+        ? MoonshotApiChainId.BASE_MAINNET
+        : MoonshotApiChainId.BASE_TESTNET;
 
-      return data;
-    } catch (err: any) {
-      console.log(err.response?.data);
-      throw new Error('error');
-    }
+    return this.apiClient.publicRequest(`/tokens/v1`, {
+      method: 'POST',
+      data: {
+        ...prepareBuyDto,
+        chainId,
+      },
+    });
+  }
+
+  submitMint(
+    draftTokenId: string,
+    submitDto: MintTokenSubmitV1Request,
+  ): Promise<MintTokenSubmitV1Response> {
+    return this.apiClient.publicRequest(`/tokens/v1/${draftTokenId}/submit`, {
+      method: 'POST',
+      data: submitDto,
+    });
   }
 }
