@@ -15,25 +15,29 @@ describe('Moonshot', () => {
   const provider = new JsonRpcProvider(process.env.RPC_URL as string);
   const signer = new Wallet(testWallet as string, provider);
 
+  const basicTokenMintData = {
+    name: 'TEST_TOKEN',
+    symbol: 'TEST_TOKEN',
+    curveType: CurveType.CONSTANT_PRODUCT_V1 as CurveType.CONSTANT_PRODUCT_V1,
+    migrationDex: MigrationDex.UNISWAP as MigrationDex.UNISWAP,
+    icon: mockImg,
+    description: 'TEST_TOKEN',
+    links: [{ url: 'https://x.com', label: 'x handle' }],
+    banner: mockImg,
+  };
+
   beforeAll(() => {
     moonshot = new Moonshot({
       signer,
-      authToken: 'TMP_TOKEN',
       env: Environment.TESTNET,
     });
   });
 
-  it('should prepare a token mint', async () => {
+  it('prepares a mint and buy transaction correctly', async () => {
     const prepMint = await moonshot.prepareMintTx({
+      ...basicTokenMintData,
       creator: await signer.getAddress(),
-      name: 'TEST_TOKEN',
-      symbol: 'TEST_TOKEN',
-      curveType: CurveType.CONSTANT_PRODUCT_V1,
-      migrationDex: MigrationDex.UNISWAP,
-      icon: mockImg,
-      description: 'TEST_TOKEN',
-      links: [{ url: 'https://x.com', label: 'x handle' }],
-      banner: mockImg,
+      tokenAmount: '10000000000',
     });
 
     expect(prepMint.token).toBeDefined();
@@ -44,7 +48,23 @@ describe('Moonshot', () => {
       prepMint.transaction,
     ).toJSON();
 
-    console.log(deserializedTransaction);
+    expect(deserializedTransaction.to).toBeDefined();
+    expect(deserializedTransaction.data).toBeDefined();
+    expect(deserializedTransaction.value).toBeDefined();
+    expect(Number(deserializedTransaction.value)).toBeGreaterThan(0);
+    expect(deserializedTransaction.chainId).toBeDefined();
+  });
+
+  it('creates and buys a token on moonshot correctly', async () => {
+    const prepMint = await moonshot.prepareMintTx({
+      ...basicTokenMintData,
+      creator: await signer.getAddress(),
+      tokenAmount: '10000000000000',
+    });
+
+    const deserializedTransaction = Transaction.from(
+      prepMint.transaction,
+    ).toJSON();
 
     const walletAddress = await signer.getAddress();
 
@@ -67,16 +87,14 @@ describe('Moonshot', () => {
     const receipt = await txResponse.wait();
 
     if (receipt?.status === 1) {
-      try {
-        const res = await moonshot.submitMintTx({
-          token: prepMint.token,
-          signedTransaction: JSON.stringify(txResponse),
-          tokenId: prepMint.draftTokenId,
-        });
-        console.log(res);
-      } catch (err) {
-        console.log(err);
-      }
+      const res = await moonshot.submitMintTx({
+        token: prepMint.token,
+        signedTransaction: JSON.stringify(txResponse),
+        tokenId: prepMint.draftTokenId,
+      });
+
+      expect(res.status).toBe('SUCCESS');
+      expect(res.txSignature).toBeDefined();
     }
   });
 });
