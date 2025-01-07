@@ -38,6 +38,7 @@ export const buyTx = async (): Promise<void> => {
   const token = await Token.create({
     tokenAddress: '0x1234567890123456789012345678901234567890',
     moonshot,
+    provider,
   });
 
   const tokenAmount = 10000n * 10n ** 18n; // Buy 10k tokens
@@ -88,6 +89,7 @@ export const sellTx = async (): Promise<void> => {
   const token = await Token.create({
     tokenAddress: '0x1234567890123456789012345678901234567890',
     moonshot,
+    provider,
   });
 
   const tokenAmount = 10000n * 10n ** 18n; // Buy 10k tokens
@@ -115,4 +117,70 @@ export const sellTx = async (): Promise<void> => {
   const txHash = await signer.sendTransaction(tx);
   console.log('Transaction hash:', txHash);
 };
+```
+
+### Mint example
+```typescript
+import {
+  Environment,
+  Moonshot,
+  MigrationDex,
+  MintTokenCurveType,
+} from '@wen-moon-ser/moonshot-sdk-evm';
+import { JsonRpcProvider, Wallet, Transaction } from 'ethers';
+
+const provider = new JsonRpcProvider('RPC_URL' as string);
+const signer = new Wallet('PRIVATE_KEY', provider);
+
+const mockImg = '...' // base64 image
+
+const moonshot = new Moonshot({
+  signer,
+  env: Environment.TESTNET,
+});
+
+const prepMint = await moonshot.prepareMintTx({
+  name: 'TEST_TOKEN',
+  symbol: 'TEST_TOKEN',
+  curveType: MintTokenCurveType.CONSTANT_PRODUCT_V1,
+  migrationDex: MigrationDex.UNISWAP,
+  icon: mockImg,
+  description: 'TEST_TOKEN',
+  links: [{ url: 'https://x.com', label: 'x handle' }],
+  banner: mockImg,
+  creator: await signer.getAddress(),
+  tokenAmount: '10000000000000',
+});
+
+const deserializedTransaction = Transaction.from(
+  prepMint.transaction,
+).toJSON();
+
+const walletAddress = await signer.getAddress();
+
+const feeData = await provider.getFeeData();
+
+const tx = {
+  ...deserializedTransaction,
+  gasPrice: feeData.gasPrice,
+  from: walletAddress,
+  nonce: await provider.getTransactionCount(walletAddress, 'latest'),
+};
+
+const gasLimit = await provider.estimateGas(tx);
+
+const txResponse = await signer.sendTransaction({
+  ...tx,
+  gasLimit,
+});
+
+const receipt = await txResponse.wait();
+
+if (receipt?.status === 1) {
+  await moonshot.submitMintTx({
+    token: prepMint.token,
+    signedTransaction: JSON.stringify(txResponse),
+    tokenId: prepMint.draftTokenId,
+  });
+}
 ```

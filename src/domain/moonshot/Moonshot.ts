@@ -6,11 +6,18 @@ import { AmountAndFee } from './AmountAndFee';
 import { Environment } from './Environment';
 import { BASE_MAINNET_ADDRESS, BASE_SEPOLIA_ADDRESS } from './Addresses';
 import { MoonshotInitOptions } from './MoonshotInitOptions';
+import { MintTokenPrepareV1Response } from '../../infra/moonshot-api/MintTokenPrepareV1Response';
+import { PrepareMintTxOptions } from './PrepareMintTxOptions';
+import { MoonshotApiAdapter } from '../../infra/moonshot-api';
+import { SubmitMintTxOptions } from '../../infra/moonshot-api/SubmitMintTxOptions';
+import { SubmitMintTxResponse } from '../../infra/moonshot-api/SubmitMintTxResponse';
 
 export class Moonshot {
   private factory: MoonshotFactory;
 
   private signerWithProvider: Wallet;
+
+  private apiAdapter: MoonshotApiAdapter;
 
   constructor(options: MoonshotInitOptions) {
     this.signerWithProvider = options.signer;
@@ -24,6 +31,27 @@ export class Moonshot {
       address,
       this.signerWithProvider,
     );
+
+    this.apiAdapter = new MoonshotApiAdapter(options.env);
+  }
+
+  async prepareMintTx(
+    options: PrepareMintTxOptions,
+  ): Promise<MintTokenPrepareV1Response> {
+    return this.apiAdapter.prepareMint({
+      ...options,
+      creatorId: options.creator,
+    });
+  }
+
+  async submitMintTx(
+    options: SubmitMintTxOptions,
+  ): Promise<SubmitMintTxResponse> {
+    const res = await this.apiAdapter.submitMint(options.tokenId, options);
+    return {
+      txSignature: res.txnId,
+      status: res.status,
+    };
   }
 
   async buyExactOut(
