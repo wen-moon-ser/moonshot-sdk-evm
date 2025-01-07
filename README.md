@@ -126,7 +126,7 @@ import {
   Moonshot,
   MigrationDex,
   MintTokenCurveType,
-} from '../../domain';
+} from '@wen-moon-ser/moonshot-sdk-evm';
 import { JsonRpcProvider, Wallet } from 'ethers';
 
 const provider = new JsonRpcProvider('RPC_URL' as string);
