@@ -1,4 +1,4 @@
-import { CurveType, MigrationDex } from '@heliofi/launchpad-common';
+import { MintTokenCurveType, MigrationDex } from '../../domain';
 
 export interface PrepareMintTxOptions {
   /**
@@ -24,12 +24,12 @@ export interface PrepareMintTxOptions {
    * Currently only CONSTANT_PRODUCT_V1 is supported
    * LINEAR_V1 is a legacy curve
    */
-  curveType: CurveType.CONSTANT_PRODUCT_V1;
+  curveType: MintTokenCurveType;
 
   /**
    * DEX to use for token migration
    */
-  migrationDex: MigrationDex.UNISWAP;
+  migrationDex: MigrationDex;
 
   /**
    * Token icon encoded in base64 format

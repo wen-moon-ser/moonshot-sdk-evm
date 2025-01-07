@@ -1,5 +1,9 @@
-import { Environment, Moonshot } from '../../domain';
-import { CurveType, MigrationDex } from '@heliofi/launchpad-common';
+import {
+  Environment,
+  Moonshot,
+  MigrationDex,
+  MintTokenCurveType,
+} from '../../domain';
 import 'dotenv/config';
 import { JsonRpcProvider, Transaction, Wallet } from 'ethers';
 
@@ -18,8 +22,8 @@ describe('Moonshot', () => {
   const basicTokenMintData = {
     name: 'TEST_TOKEN',
     symbol: 'TEST_TOKEN',
-    curveType: CurveType.CONSTANT_PRODUCT_V1 as CurveType.CONSTANT_PRODUCT_V1,
-    migrationDex: MigrationDex.UNISWAP as MigrationDex.UNISWAP,
+    curveType: MintTokenCurveType.CONSTANT_PRODUCT_V1,
+    migrationDex: MigrationDex.UNISWAP,
     icon: mockImg,
     description: 'TEST_TOKEN',
     links: [{ url: 'https://x.com', label: 'x handle' }],

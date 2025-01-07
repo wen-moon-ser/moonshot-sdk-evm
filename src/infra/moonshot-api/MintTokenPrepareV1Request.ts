@@ -1,5 +1,5 @@
-import { CurveType, MigrationDex } from '@heliofi/launchpad-common';
 import { MoonshotApiChainId } from './MoonshotApiChainId';
+import { MigrationDex, MintTokenCurveType } from '../../domain';
 
 /**
  * Request interface for preparing token minting
@@ -31,12 +31,12 @@ export interface MintTokenPrepareV1Request {
    * Type of curve to use for token pricing
    * Currently only CONSTANT_PRODUCT_V1 is supported
    */
-  curveType: CurveType.CONSTANT_PRODUCT_V1;
+  curveType: MintTokenCurveType;
 
   /**
    * DEX to use for token migration
    */
-  migrationDex: MigrationDex.UNISWAP;
+  migrationDex: MigrationDex;
 
   /**
    * Token icon encoded in base64 format
