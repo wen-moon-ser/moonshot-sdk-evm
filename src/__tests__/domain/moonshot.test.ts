@@ -1,7 +1,7 @@
 import { Environment, Moonshot } from '../../domain';
 import { CurveType, MigrationDex } from '@heliofi/launchpad-common';
 import 'dotenv/config';
-import { JsonRpcProvider, Wallet } from 'ethers';
+import { JsonRpcProvider, Transaction, Wallet } from 'ethers';
 
 jest.setTimeout(60000);
 
@@ -34,31 +34,49 @@ describe('Moonshot', () => {
       description: 'TEST_TOKEN',
       links: [{ url: 'https://x.com', label: 'x handle' }],
       banner: mockImg,
-      tokenAmount: '10000000',
     });
-
-    console.log(prepMint);
 
     expect(prepMint.token).toBeDefined();
     expect(prepMint.draftTokenId).toBeDefined();
     expect(prepMint.transaction).toBeDefined();
 
-    const signedTx = await signer.signTransaction({
-      data: prepMint.transaction,
-      from: await signer.getAddress(),
+    const deserializedTransaction = Transaction.from(
+      prepMint.transaction,
+    ).toJSON();
+
+    console.log(deserializedTransaction);
+
+    const walletAddress = await signer.getAddress();
+
+    const feeData = await provider.getFeeData();
+
+    const tx = {
+      ...deserializedTransaction,
+      gasPrice: feeData.gasPrice,
+      from: walletAddress,
+      nonce: await provider.getTransactionCount(walletAddress, 'latest'),
+    };
+
+    const gasLimit = await provider.estimateGas(tx);
+
+    const txResponse = await signer.sendTransaction({
+      ...tx,
+      gasLimit,
     });
 
-    console.log(signedTx);
+    const receipt = await txResponse.wait();
 
-    try {
-      const res = await moonshot.submitMintTx({
-        token: prepMint.token,
-        signedTransaction: signedTx,
-        tokenId: prepMint.draftTokenId,
-      });
-      console.log(res);
-    } catch (err) {
-      console.log(err);
+    if (receipt?.status === 1) {
+      try {
+        const res = await moonshot.submitMintTx({
+          token: prepMint.token,
+          signedTransaction: JSON.stringify(txResponse),
+          tokenId: prepMint.draftTokenId,
+        });
+        console.log(res);
+      } catch (err) {
+        console.log(err);
+      }
     }
   });
 });

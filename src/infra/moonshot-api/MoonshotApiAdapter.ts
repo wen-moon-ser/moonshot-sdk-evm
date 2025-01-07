@@ -42,9 +42,13 @@ export class MoonshotApiAdapter {
     draftTokenId: string,
     submitDto: MintTokenSubmitV1Request,
   ): Promise<MintTokenSubmitV1Response> {
-    return this.apiClient.publicRequest(`/tokens/v1/${draftTokenId}/submit`, {
-      method: 'POST',
-      data: submitDto,
-    });
+    return this.apiClient.authedRequest(
+      `/tokens/v1/${draftTokenId}/submit`,
+      'TMP_TOKEN',
+      {
+        method: 'POST',
+        data: submitDto,
+      },
+    );
   }
 }

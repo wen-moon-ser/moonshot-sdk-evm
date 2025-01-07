@@ -1,4 +1,5 @@
 import { CurveType, MigrationDex } from '@heliofi/launchpad-common';
+import { MoonshotApiChainId } from './MoonshotApiChainId';
 
 /**
  * Request interface for preparing token minting
@@ -7,7 +8,7 @@ export interface MintTokenPrepareV1Request {
   /**
    * DEX Screener chain ID, for example: `solana`
    */
-  chainId: 'solana';
+  chainId: MoonshotApiChainId;
 
   /**
    * Public key
