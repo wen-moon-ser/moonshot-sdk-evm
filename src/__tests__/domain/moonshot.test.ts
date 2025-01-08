@@ -4,8 +4,8 @@ import {
   MigrationDex,
   MintTokenCurveType,
 } from '../../domain';
-import 'dotenv/config';
 import { JsonRpcProvider, Transaction, Wallet } from 'ethers';
+import { MoonshotFactory__factory } from '../../evm';
 
 jest.setTimeout(60000);
 
@@ -99,6 +99,22 @@ describe('Moonshot', () => {
 
       expect(res.status).toBe('SUCCESS');
       expect(res.txSignature).toBeDefined();
+
+      const contractInterface = MoonshotFactory__factory.createInterface();
+
+      const decodedResult = contractInterface.decodeFunctionResult(
+        'createMoonshotTokenAndBuy',
+        receipt.logs[3].data,
+      );
+
+      const createdTokenAddress = decodedResult[0];
+
+      console.log(createdTokenAddress);
+
+      const code = await provider.getCode(createdTokenAddress);
+      const isContract = code !== '0x';
+
+      expect(isContract).toBe(true);
     }
   });
 });

@@ -17,6 +17,7 @@ import { InitTokenOptions } from './InitTokenOptions';
 import { FixedSide } from './FixedSide';
 import { Moonshot } from '../moonshot';
 import { CurveType } from '../curve/CurveTypes';
+import { BPS_PRECISION_BIGINT } from '../constants';
 
 export class Token {
   private tokenAddress: string;
@@ -104,42 +105,63 @@ export class Token {
 
     if (options.tradeDirection == 'BUY') {
       if (options.fixedSide == FixedSide.IN) {
+        const collateralAmountWithSlippage =
+          options.collateralAmount +
+          (options.collateralAmount * BigInt(options.slippageBps)) /
+            BPS_PRECISION_BIGINT;
+
         tx = await this.factory
           .getFactory()
           .buyExactOut.populateTransaction(
             this.tokenAddress,
             options.tokenAmount,
-            options.collateralAmount,
+            collateralAmountWithSlippage,
             {
-              value: options.collateralAmount,
+              value: collateralAmountWithSlippage,
             },
           );
       } else {
+        const tokenAmountWithSlippage =
+          options.tokenAmount -
+          (options.tokenAmount * BigInt(options.slippageBps)) /
+            BPS_PRECISION_BIGINT;
+
         tx = await this.factory
           .getFactory()
           .buyExactIn.populateTransaction(
             this.tokenAddress,
-            options.tokenAmount,
+            tokenAmountWithSlippage,
             {
               value: options.collateralAmount,
             },
           );
       }
     } else {
+      // SELL
       if (options.fixedSide == FixedSide.IN) {
+        const collateralAmountWithSlippage =
+          options.collateralAmount +
+          (options.collateralAmount * BigInt(options.slippageBps)) /
+            BPS_PRECISION_BIGINT;
+
         tx = await this.factory
           .getFactory()
           .sellExactOut.populateTransaction(
             this.tokenAddress,
             options.tokenAmount,
-            options.collateralAmount,
+            collateralAmountWithSlippage,
           );
       } else {
+        const tokenAmountWithSlippage =
+          options.tokenAmount -
+          (options.tokenAmount * BigInt(options.slippageBps)) /
+            BPS_PRECISION_BIGINT;
+
         tx = await this.factory
           .getFactory()
           .sellExactIn.populateTransaction(
             this.tokenAddress,
-            options.tokenAmount,
+            tokenAmountWithSlippage,
             options.collateralAmount,
           );
       }
