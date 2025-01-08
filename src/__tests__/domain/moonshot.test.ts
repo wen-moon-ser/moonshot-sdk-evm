@@ -109,8 +109,6 @@ describe('Moonshot', () => {
 
       const createdTokenAddress = decodedResult[0];
 
-      console.log(createdTokenAddress);
-
       const code = await provider.getCode(createdTokenAddress);
       const isContract = code !== '0x';
 
