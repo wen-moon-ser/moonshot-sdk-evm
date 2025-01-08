@@ -1,6 +1,7 @@
 import { Environment, FixedSide, Moonshot, Token } from '../../domain';
 import { ethers, JsonRpcProvider, Wallet } from 'ethers';
 import { MoonshotFactory__factory } from '../../evm';
+import { BPS_PRECISION_BIGINT } from '../../domain/constants';
 
 describe('Token', () => {
   const tokenAddress = '0xfCF8882C8d284e653489F2FB1C3F4574E446ad2A'; // Token Address on testnet
@@ -27,6 +28,7 @@ describe('Token', () => {
 
   it('prepares BuyExactIn transaction properly', async () => {
     const collateralAmount = ethers.parseEther('0.0001');
+    const slippageBps = 500;
 
     const tokenAmountForTransaction = await token.getTokenAmountByCollateral({
       collateralAmount,
@@ -34,14 +36,12 @@ describe('Token', () => {
     });
 
     const tx = await token.prepareTx({
-      slippageBps: 500,
+      slippageBps,
       tokenAmount: tokenAmountForTransaction,
       collateralAmount: collateralAmount,
       tradeDirection: 'BUY',
       fixedSide: FixedSide.IN,
     });
-
-    console.log(tx);
 
     const moonshotFactoryInterface = MoonshotFactory__factory.createInterface();
 
@@ -50,11 +50,54 @@ describe('Token', () => {
       tx.data, // The data field from your transaction
     );
 
-    console.log(decodedData);
+    expect(tx.value).toBe(collateralAmount);
+    expect(decodedData[0]).toBe(tokenAddress);
+    expect(decodedData[1]).toBe(
+      tokenAmountForTransaction -
+        (tokenAmountForTransaction * BigInt(slippageBps)) /
+          BPS_PRECISION_BIGINT,
+    );
   });
 
-  it('prepares SellExactIn transaction properly', async () => {
+  it('prepares buyExactOut transaction properly', async () => {
     const tokenAmount = ethers.parseUnits('100', 18);
+    const slippageBps = 500;
+
+    const collateralAmountForTransaction =
+      await token.getCollateralAmountByTokens({
+        tokenAmount,
+        tradeDirection: 'BUY',
+      });
+
+    const tx = await token.prepareTx({
+      slippageBps,
+      tokenAmount,
+      collateralAmount: collateralAmountForTransaction,
+      tradeDirection: 'BUY',
+      fixedSide: FixedSide.OUT,
+    });
+
+    const moonshotFactoryInterface = MoonshotFactory__factory.createInterface();
+
+    const decodedData = moonshotFactoryInterface.decodeFunctionData(
+      'buyExactOut', // Function name
+      tx.data, // The data field from your transaction
+    );
+
+    const valueWithSlippage =
+      collateralAmountForTransaction +
+      (collateralAmountForTransaction * BigInt(slippageBps)) /
+        BPS_PRECISION_BIGINT;
+
+    expect(tx.value).toBe(valueWithSlippage);
+    expect(decodedData[0]).toBe(tokenAddress);
+    expect(decodedData[1]).toBe(tokenAmount);
+    expect(decodedData[2]).toBe(valueWithSlippage);
+  });
+
+  it('prepares sellExactIn transaction properly', async () => {
+    const tokenAmount = ethers.parseUnits('100', 18);
+    const slippageBps = 500;
 
     const collateralAmountForTransaction =
       await token.getCollateralAmountByTokens({
@@ -63,14 +106,12 @@ describe('Token', () => {
       });
 
     const tx = await token.prepareTx({
-      slippageBps: 500,
+      slippageBps,
       tokenAmount,
       collateralAmount: collateralAmountForTransaction,
       tradeDirection: 'SELL',
       fixedSide: FixedSide.IN,
     });
-
-    console.log(tx);
 
     const moonshotFactoryInterface = MoonshotFactory__factory.createInterface();
 
@@ -79,6 +120,46 @@ describe('Token', () => {
       tx.data, // The data field from your transaction
     );
 
-    console.log(decodedData);
+    expect(tx.value).toBeUndefined();
+    expect(decodedData[0]).toBe(tokenAddress);
+    expect(decodedData[1]).toBe(tokenAmount);
+    expect(decodedData[2]).toBe(
+      collateralAmountForTransaction -
+        (collateralAmountForTransaction * BigInt(slippageBps)) /
+          BPS_PRECISION_BIGINT,
+    );
+  });
+
+  it('prepares sellExactOut transaction properly', async () => {
+    const collateralAmount = ethers.parseEther('0.0001');
+    const slippageBps = 500;
+
+    const tokenAmountForTransaction = await token.getTokenAmountByCollateral({
+      collateralAmount,
+      tradeDirection: 'SELL',
+    });
+
+    const tx = await token.prepareTx({
+      slippageBps,
+      tokenAmount: tokenAmountForTransaction,
+      collateralAmount: collateralAmount,
+      tradeDirection: 'SELL',
+      fixedSide: FixedSide.OUT,
+    });
+
+    const moonshotFactoryInterface = MoonshotFactory__factory.createInterface();
+
+    const decodedData = moonshotFactoryInterface.decodeFunctionData(
+      'sellExactOut', // Function name
+      tx.data, // The data field from your transaction
+    );
+
+    expect(tx.value).toBeUndefined();
+    expect(decodedData[0]).toBe(tokenAddress);
+    expect(decodedData[1]).toBe(
+      tokenAmountForTransaction +
+        (tokenAmountForTransaction * BigInt(slippageBps)) /
+          BPS_PRECISION_BIGINT,
+    );
   });
 });

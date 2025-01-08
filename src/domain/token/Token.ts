@@ -139,30 +139,30 @@ export class Token {
     } else {
       // SELL
       if (options.fixedSide == FixedSide.IN) {
-        const tokenAmountWithSlippage =
-          options.tokenAmount -
-          (options.tokenAmount * BigInt(options.slippageBps)) /
+        const collateralAmountWithSlippage =
+          options.collateralAmount -
+          (options.collateralAmount * BigInt(options.slippageBps)) /
             BPS_PRECISION_BIGINT;
 
         tx = await this.factory
           .getFactory()
           .sellExactIn.populateTransaction(
             this.tokenAddress,
-            tokenAmountWithSlippage,
-            options.collateralAmount,
+            options.tokenAmount,
+            collateralAmountWithSlippage,
           );
       } else {
-        const collateralAmountWithSlippage =
-          options.collateralAmount +
-          (options.collateralAmount * BigInt(options.slippageBps)) /
+        const tokenAmountWithSlippage =
+          options.tokenAmount +
+          (options.tokenAmount * BigInt(options.slippageBps)) /
             BPS_PRECISION_BIGINT;
 
         tx = await this.factory
           .getFactory()
           .sellExactOut.populateTransaction(
             this.tokenAddress,
-            options.tokenAmount,
-            collateralAmountWithSlippage,
+            tokenAmountWithSlippage,
+            options.collateralAmount,
           );
       }
     }
