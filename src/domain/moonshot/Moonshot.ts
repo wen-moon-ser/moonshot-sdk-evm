@@ -3,14 +3,13 @@ import { BigNumberish, ethers, Wallet } from 'ethers';
 import { MoonshotFactory } from '../../evm';
 import { FixedSide } from '../token';
 import { AmountAndFee } from './AmountAndFee';
-import { Environment } from './Environment';
-import { BASE_MAINNET_ADDRESS, BASE_SEPOLIA_ADDRESS } from './Addresses';
 import { MoonshotInitOptions } from './MoonshotInitOptions';
 import { MintTokenPrepareV1Response } from '../../infra/moonshot-api/MintTokenPrepareV1Response';
 import { PrepareMintTxOptions } from './PrepareMintTxOptions';
 import { MoonshotApiAdapter } from '../../infra/moonshot-api';
 import { SubmitMintTxOptions } from '../../infra/moonshot-api/SubmitMintTxOptions';
 import { SubmitMintTxResponse } from '../../infra/moonshot-api/SubmitMintTxResponse';
+import { getMoonshotFactoryAddress } from '../utils/getMoonshotFactoryAddress';
 
 export class Moonshot {
   private factory: MoonshotFactory;
@@ -22,17 +21,17 @@ export class Moonshot {
   constructor(options: MoonshotInitOptions) {
     this.signerWithProvider = options.signer;
 
-    const address =
-      options.env == Environment.MAINNET
-        ? BASE_MAINNET_ADDRESS
-        : BASE_SEPOLIA_ADDRESS;
+    const moonshotFactoryAddress = getMoonshotFactoryAddress(
+      options.env,
+      options.network,
+    );
 
     this.factory = MoonshotFactory__factory.connect(
-      address,
+      moonshotFactoryAddress,
       this.signerWithProvider,
     );
 
-    this.apiAdapter = new MoonshotApiAdapter(options.env);
+    this.apiAdapter = new MoonshotApiAdapter(options.env, options.network);
   }
 
   async prepareMintTx(
