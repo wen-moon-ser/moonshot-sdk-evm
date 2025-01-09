@@ -18,6 +18,10 @@ import { FixedSide } from './FixedSide';
 import { Moonshot } from '../moonshot';
 import { CurveType } from '../curve/CurveTypes';
 import { BPS_PRECISION_BIGINT } from '../constants';
+import {
+  applyNegativeSlippage,
+  applyPositiveSlippage,
+} from '../utils/bipsToPercentageConverter';
 
 export class Token {
   private tokenAddress: string;
@@ -105,10 +109,10 @@ export class Token {
 
     if (options.tradeDirection == 'BUY') {
       if (options.fixedSide == FixedSide.IN) {
-        const tokenAmountWithSlippage =
-          options.tokenAmount -
-          (options.tokenAmount * BigInt(options.slippageBps)) /
-            BPS_PRECISION_BIGINT;
+        const tokenAmountWithSlippage = applyNegativeSlippage(
+          options.tokenAmount,
+          options.slippageBps,
+        );
 
         tx = await this.factory
           .getFactory()
@@ -120,10 +124,10 @@ export class Token {
             },
           );
       } else {
-        const collateralAmountWithSlippage =
-          options.collateralAmount +
-          (options.collateralAmount * BigInt(options.slippageBps)) /
-            BPS_PRECISION_BIGINT;
+        const collateralAmountWithSlippage = applyPositiveSlippage(
+          options.collateralAmount,
+          options.slippageBps,
+        );
 
         tx = await this.factory
           .getFactory()
@@ -139,10 +143,10 @@ export class Token {
     } else {
       // SELL
       if (options.fixedSide == FixedSide.IN) {
-        const collateralAmountWithSlippage =
-          options.collateralAmount -
-          (options.collateralAmount * BigInt(options.slippageBps)) /
-            BPS_PRECISION_BIGINT;
+        const collateralAmountWithSlippage = applyNegativeSlippage(
+          options.collateralAmount,
+          options.slippageBps,
+        );
 
         tx = await this.factory
           .getFactory()
@@ -152,10 +156,10 @@ export class Token {
             collateralAmountWithSlippage,
           );
       } else {
-        const tokenAmountWithSlippage =
-          options.tokenAmount +
-          (options.tokenAmount * BigInt(options.slippageBps)) /
-            BPS_PRECISION_BIGINT;
+        const tokenAmountWithSlippage = applyPositiveSlippage(
+          options.tokenAmount,
+          options.slippageBps,
+        );
 
         tx = await this.factory
           .getFactory()
