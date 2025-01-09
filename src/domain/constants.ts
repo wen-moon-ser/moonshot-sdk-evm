@@ -1,0 +1,1 @@
+export const BPS_PRECISION_BIGINT = 10000n;

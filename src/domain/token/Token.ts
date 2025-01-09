@@ -17,6 +17,11 @@ import { InitTokenOptions } from './InitTokenOptions';
 import { FixedSide } from './FixedSide';
 import { Moonshot } from '../moonshot';
 import { CurveType } from '../curve/CurveTypes';
+import { BPS_PRECISION_BIGINT } from '../constants';
+import {
+  applyNegativeSlippage,
+  applyPositiveSlippage,
+} from '../utils/bipsToPercentageConverter';
 
 export class Token {
   private tokenAddress: string;
@@ -104,42 +109,63 @@ export class Token {
 
     if (options.tradeDirection == 'BUY') {
       if (options.fixedSide == FixedSide.IN) {
+        const tokenAmountWithSlippage = applyNegativeSlippage(
+          options.tokenAmount,
+          options.slippageBps,
+        );
+
+        tx = await this.factory
+          .getFactory()
+          .buyExactIn.populateTransaction(
+            this.tokenAddress,
+            tokenAmountWithSlippage,
+            {
+              value: options.collateralAmount,
+            },
+          );
+      } else {
+        const collateralAmountWithSlippage = applyPositiveSlippage(
+          options.collateralAmount,
+          options.slippageBps,
+        );
+
         tx = await this.factory
           .getFactory()
           .buyExactOut.populateTransaction(
             this.tokenAddress,
             options.tokenAmount,
-            options.collateralAmount,
+            collateralAmountWithSlippage,
             {
-              value: options.collateralAmount,
-            },
-          );
-      } else {
-        tx = await this.factory
-          .getFactory()
-          .buyExactIn.populateTransaction(
-            this.tokenAddress,
-            options.tokenAmount,
-            {
-              value: options.collateralAmount,
+              value: collateralAmountWithSlippage,
             },
           );
       }
     } else {
+      // SELL
       if (options.fixedSide == FixedSide.IN) {
-        tx = await this.factory
-          .getFactory()
-          .sellExactOut.populateTransaction(
-            this.tokenAddress,
-            options.tokenAmount,
-            options.collateralAmount,
-          );
-      } else {
+        const collateralAmountWithSlippage = applyNegativeSlippage(
+          options.collateralAmount,
+          options.slippageBps,
+        );
+
         tx = await this.factory
           .getFactory()
           .sellExactIn.populateTransaction(
             this.tokenAddress,
             options.tokenAmount,
+            collateralAmountWithSlippage,
+          );
+      } else {
+        const tokenAmountWithSlippage = applyPositiveSlippage(
+          options.tokenAmount,
+          options.slippageBps,
+        );
+
+        tx = await this.factory
+          .getFactory()
+          .sellExactOut.populateTransaction(
+            this.tokenAddress,
+            tokenAmountWithSlippage,
             options.collateralAmount,
           );
       }
