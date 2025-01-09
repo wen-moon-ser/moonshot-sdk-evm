@@ -3,8 +3,6 @@ import { BigNumberish, ethers, Wallet } from 'ethers';
 import { MoonshotFactory } from '../../evm';
 import { FixedSide } from '../token';
 import { AmountAndFee } from './AmountAndFee';
-import { Environment } from './Environment';
-import { BASE_MAINNET_ADDRESS, BASE_SEPOLIA_ADDRESS } from './Addresses';
 import { MoonshotInitOptions } from './MoonshotInitOptions';
 import { MintTokenPrepareV1Response } from '../../infra/moonshot-api/MintTokenPrepareV1Response';
 import { PrepareMintTxOptions } from './PrepareMintTxOptions';
