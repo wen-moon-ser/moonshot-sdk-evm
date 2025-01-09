@@ -2,6 +2,10 @@ import { Environment, FixedSide, Moonshot, Token } from '../../domain';
 import { ethers, JsonRpcProvider, Wallet } from 'ethers';
 import { MoonshotFactory__factory } from '../../evm';
 import { BPS_PRECISION_BIGINT } from '../../domain/constants';
+import {
+  applyNegativeSlippage,
+  applyPositiveSlippage,
+} from '../../domain/utils/bipsToPercentageConverter';
 
 describe('Token', () => {
   const tokenAddress = '0xfCF8882C8d284e653489F2FB1C3F4574E446ad2A'; // Token Address on testnet
@@ -53,9 +57,7 @@ describe('Token', () => {
     expect(tx.value).toBe(collateralAmount);
     expect(decodedData[0]).toBe(tokenAddress);
     expect(decodedData[1]).toBe(
-      tokenAmountForTransaction -
-        (tokenAmountForTransaction * BigInt(slippageBps)) /
-          BPS_PRECISION_BIGINT,
+      applyNegativeSlippage(tokenAmountForTransaction, slippageBps),
     );
   });
 
@@ -84,10 +86,10 @@ describe('Token', () => {
       tx.data, // The data field from your transaction
     );
 
-    const valueWithSlippage =
-      collateralAmountForTransaction +
-      (collateralAmountForTransaction * BigInt(slippageBps)) /
-        BPS_PRECISION_BIGINT;
+    const valueWithSlippage = applyPositiveSlippage(
+      collateralAmountForTransaction,
+      slippageBps,
+    );
 
     expect(tx.value).toBe(valueWithSlippage);
     expect(decodedData[0]).toBe(tokenAddress);
@@ -124,9 +126,7 @@ describe('Token', () => {
     expect(decodedData[0]).toBe(tokenAddress);
     expect(decodedData[1]).toBe(tokenAmount);
     expect(decodedData[2]).toBe(
-      collateralAmountForTransaction -
-        (collateralAmountForTransaction * BigInt(slippageBps)) /
-          BPS_PRECISION_BIGINT,
+      applyNegativeSlippage(collateralAmountForTransaction, slippageBps),
     );
   });
 
@@ -157,9 +157,7 @@ describe('Token', () => {
     expect(tx.value).toBeUndefined();
     expect(decodedData[0]).toBe(tokenAddress);
     expect(decodedData[1]).toBe(
-      tokenAmountForTransaction +
-        (tokenAmountForTransaction * BigInt(slippageBps)) /
-          BPS_PRECISION_BIGINT,
+      applyPositiveSlippage(tokenAmountForTransaction, slippageBps),
     );
   });
 });
