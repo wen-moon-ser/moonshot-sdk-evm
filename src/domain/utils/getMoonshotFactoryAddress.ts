@@ -17,5 +17,5 @@ export const getMoonshotFactoryAddress = (
     return BASE_SEPOLIA_ADDRESS;
   }
 
-  throw new Error('Unsupported network');
+  throw new Error('Unsupported network, currently supporting BASE.');
 };

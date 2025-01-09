@@ -13,5 +13,5 @@ export const getMoonshotApiChainId = (
     return MoonshotApiChainId.BASE_TESTNET;
   }
 
-  throw new Error('Unsupported network');
+  throw new Error('Unsupported network, currently supporting BASE.');
 };
