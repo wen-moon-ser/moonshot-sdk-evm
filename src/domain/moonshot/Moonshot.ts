@@ -176,4 +176,8 @@ export class Moonshot {
   getFactory(): MoonshotFactory {
     return this.factory;
   }
+
+  getSignerWithProvider(): Wallet {
+    return this.signerWithProvider;
+  }
 }
