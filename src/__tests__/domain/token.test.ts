@@ -6,6 +6,9 @@ import {
   applyNegativeSlippage,
   applyPositiveSlippage,
 } from '../../domain/utils/bipsToPercentageConverter';
+import { ChainId } from '@heliofi/launchpad-common';
+
+jest.setTimeout(60000);
 
 describe('Token', () => {
   const tokenAddress = '0xfCF8882C8d284e653489F2FB1C3F4574E446ad2A'; // Token Address on testnet

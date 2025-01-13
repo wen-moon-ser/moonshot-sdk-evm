@@ -3,9 +3,14 @@ import {
   Moonshot,
   MigrationDex,
   MintTokenCurveType,
+  FixedSide,
+  Token,
+  BASE_SEPOLIA_ADDRESS,
 } from '../../domain';
-import { JsonRpcProvider, Transaction, Wallet } from 'ethers';
+import { ethers, JsonRpcProvider, Transaction, Wallet } from 'ethers';
 import { MoonshotFactory__factory } from '../../evm';
+import { ChainId } from '@heliofi/launchpad-common';
+import { applyNegativeSlippage } from '../../domain/utils/bipsToPercentageConverter';
 
 jest.setTimeout(60000);
 
@@ -28,6 +33,121 @@ describe('Moonshot', () => {
     description: 'TEST_TOKEN',
     links: [{ url: 'https://x.com', label: 'x handle' }],
     banner: mockImg,
+  };
+
+  const buyToken = async (tokenAddress: string) => {
+    const token = await Token.create({
+      moonshot,
+      provider,
+      tokenAddress,
+    });
+
+    const collateralAmount = ethers.parseEther('0.001');
+
+    const tokenAmountForTransaction = await token.getTokenAmountByCollateral({
+      collateralAmount,
+      tradeDirection: 'BUY',
+    });
+
+    const slippageBps = 1000;
+
+    const buyTx = await token.prepareTx({
+      slippageBps,
+      tokenAmount: tokenAmountForTransaction,
+      collateralAmount: collateralAmount,
+      tradeDirection: 'BUY',
+      fixedSide: FixedSide.IN,
+    });
+
+    const walletAddress = await signer.getAddress();
+
+    const feeData = await provider.getFeeData();
+
+    const nonce = await provider.getTransactionCount(walletAddress, 'latest');
+
+    const enrichedBuyTx = {
+      ...buyTx,
+      gasPrice: feeData.gasPrice,
+      nonce: nonce,
+      chainId: ChainId.BASE_SEPOLIA,
+      from: walletAddress,
+    };
+
+    const buyTxGasLimit = await provider.estimateGas(enrichedBuyTx);
+
+    const buyTxResponse = await signer.sendTransaction({
+      ...buyTx,
+      gasLimit: buyTxGasLimit,
+    });
+
+    const buyTxReceipt = await buyTxResponse.wait();
+
+    expect(buyTxReceipt?.status).toBe(1);
+
+    const balance = await token.balanceOf(walletAddress);
+
+    expect(balance).toBeGreaterThanOrEqual(
+      applyNegativeSlippage(tokenAmountForTransaction, slippageBps),
+    );
+
+    return balance;
+  };
+
+  const sellToken = async (tokenAddress: string, tokenAmount: bigint) => {
+    const token = await Token.create({
+      moonshot,
+      provider,
+      tokenAddress,
+    });
+
+    await token.approve(BASE_SEPOLIA_ADDRESS, tokenAmount);
+
+    const collateralAmountForTransaction =
+      await token.getCollateralAmountByTokens({
+        tokenAmount,
+        tradeDirection: 'BUY',
+      });
+
+    const slippageBps = 1000;
+
+    const sellTx = await token.prepareTx({
+      slippageBps,
+      tokenAmount,
+      collateralAmount: collateralAmountForTransaction,
+      tradeDirection: 'SELL',
+      fixedSide: FixedSide.IN,
+    });
+
+    const walletAddress = await signer.getAddress();
+
+    const feeData = await provider.getFeeData();
+
+    const nonce = await provider.getTransactionCount(walletAddress, 'latest');
+
+    const enrichedSellTx = {
+      ...sellTx,
+      gasPrice: feeData.gasPrice,
+      nonce: nonce,
+      chainId: ChainId.BASE_SEPOLIA,
+      from: walletAddress,
+    };
+
+    const sellTxGasLimit = await provider.estimateGas(enrichedSellTx);
+
+    const sellTxResponse = await signer.sendTransaction({
+      ...enrichedSellTx,
+      gasLimit: sellTxGasLimit,
+    });
+
+    const sellTxReceipt = await sellTxResponse.wait();
+
+    expect(sellTxReceipt?.status).toBe(1);
+
+    const balance = await token.balanceOf(walletAddress);
+
+    expect(balance).toBeGreaterThanOrEqual(0);
+
+    return balance;
   };
 
   beforeAll(() => {
@@ -113,6 +233,10 @@ describe('Moonshot', () => {
       const isContract = code !== '0x';
 
       expect(isContract).toBe(true);
+
+      const balance = await buyToken(createdTokenAddress);
+
+      await sellToken(createdTokenAddress, balance);
     }
   });
 });
