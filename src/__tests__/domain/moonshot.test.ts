@@ -35,7 +35,7 @@ describe('Moonshot', () => {
     banner: mockImg,
   };
 
-  const buyToken = async (tokenAddress: string) => {
+  const buyExactIn = async (tokenAddress: string) => {
     const token = await Token.create({
       moonshot,
       provider,
@@ -93,7 +93,7 @@ describe('Moonshot', () => {
     return balance;
   };
 
-  const sellToken = async (tokenAddress: string, tokenAmount: bigint) => {
+  const sellExactIn = async (tokenAddress: string, tokenAmount: bigint) => {
     const token = await Token.create({
       moonshot,
       provider,
@@ -146,8 +146,6 @@ describe('Moonshot', () => {
     const balance = await token.balanceOf(walletAddress);
 
     expect(balance).toBeGreaterThanOrEqual(0);
-
-    return balance;
   };
 
   beforeAll(() => {
@@ -220,23 +218,16 @@ describe('Moonshot', () => {
       expect(res.status).toBe('SUCCESS');
       expect(res.txSignature).toBeDefined();
 
-      const contractInterface = MoonshotFactory__factory.createInterface();
-
-      const decodedResult = contractInterface.decodeFunctionResult(
-        'createMoonshotTokenAndBuy',
-        receipt.logs[3].data,
-      );
-
-      const createdTokenAddress = decodedResult[0];
+      const createdTokenAddress = receipt?.logs[0].address;
 
       const code = await provider.getCode(createdTokenAddress);
       const isContract = code !== '0x';
 
       expect(isContract).toBe(true);
 
-      const balance = await buyToken(createdTokenAddress);
+      const balance = await buyExactIn(createdTokenAddress);
 
-      await sellToken(createdTokenAddress, balance);
+      await sellExactIn(createdTokenAddress, balance);
     }
   });
 });
