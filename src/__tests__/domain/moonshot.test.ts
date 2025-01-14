@@ -5,7 +5,6 @@ import {
   MintTokenCurveType,
   FixedSide,
   Token,
-  BASE_SEPOLIA_ADDRESS,
 } from '../../domain';
 import { ethers, JsonRpcProvider, Transaction, Wallet } from 'ethers';
 import { applyNegativeSlippage } from '../../domain/utils/bipsToPercentageConverter';
