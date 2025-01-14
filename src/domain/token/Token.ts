@@ -193,10 +193,9 @@ export class Token {
     return this.token.balanceOf(address);
   }
 
-  async approve(
-    spender: string,
+  async approveForMoonshotSell(
     amount: bigint,
   ): Promise<ContractTransactionResponse> {
-    return this.token.approve(spender, amount);
+    return this.token.approve(this.factory.getMoonshotFactoryAddress(), amount);
   }
 }
