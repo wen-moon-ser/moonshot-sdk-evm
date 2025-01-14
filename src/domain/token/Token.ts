@@ -35,6 +35,8 @@ export class Token {
 
   private factory: Moonshot;
 
+  private factoryAddress: string;
+
   private tokenCurveAdapter: AbstractCurveAdapter;
 
   private constructor(
@@ -42,11 +44,13 @@ export class Token {
     factory: Moonshot,
     tokenCurveAdapter: AbstractCurveAdapter,
     tokenAddress: string,
+    factoryAddress: string,
   ) {
     this.token = token;
     this.factory = factory;
     this.tokenCurveAdapter = tokenCurveAdapter;
     this.tokenAddress = tokenAddress;
+    this.factoryAddress = factoryAddress;
   }
 
   static async create(options: InitTokenOptions): Promise<Token> {
@@ -71,7 +75,7 @@ export class Token {
     const factoryAddress = await token.factory();
 
     if (factoryAddress !== (await options.moonshot.getFactory().getAddress())) {
-      throw new Error(
+      console.warn(
         'Token created by old Moonshot Factory, that is no longer supported.',
       );
     }
@@ -81,6 +85,7 @@ export class Token {
       options.moonshot,
       tokenCurveAdapter,
       await token.getAddress(),
+      factoryAddress,
     );
   }
 
@@ -186,7 +191,10 @@ export class Token {
       }
     }
 
-    return tx;
+    return {
+      ...tx,
+      to: this.factoryAddress,
+    };
   }
 
   async balanceOf(address: string): Promise<bigint> {
