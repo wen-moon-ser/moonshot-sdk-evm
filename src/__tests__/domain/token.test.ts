@@ -1,12 +1,10 @@
 import { Environment, FixedSide, Moonshot, Token } from '../../domain';
 import { ethers, JsonRpcProvider, Wallet } from 'ethers';
 import { MoonshotFactory__factory } from '../../evm';
-import { BPS_PRECISION_BIGINT } from '../../domain/constants';
 import {
   applyNegativeSlippage,
   applyPositiveSlippage,
 } from '../../domain/utils/bipsToPercentageConverter';
-import { ChainId } from '@heliofi/launchpad-common';
 
 jest.setTimeout(60000);
 
@@ -121,8 +119,8 @@ describe('Token', () => {
     const moonshotFactoryInterface = MoonshotFactory__factory.createInterface();
 
     const decodedData = moonshotFactoryInterface.decodeFunctionData(
-      'sellExactIn', // Function name
-      tx.data, // The data field from your transaction
+      'sellExactIn',
+      tx.data,
     );
 
     expect(tx.value).toBeUndefined();
@@ -153,8 +151,8 @@ describe('Token', () => {
     const moonshotFactoryInterface = MoonshotFactory__factory.createInterface();
 
     const decodedData = moonshotFactoryInterface.decodeFunctionData(
-      'sellExactOut', // Function name
-      tx.data, // The data field from your transaction
+      'sellExactOut',
+      tx.data,
     );
 
     expect(tx.value).toBeUndefined();
