@@ -7,5 +7,5 @@ export interface InitTokenOptions {
   tokenAddress: string;
   moonshot: Moonshot;
   curveType?: CurveType;
-  provider?: ethers.JsonRpcProvider; // @depricated
+  provider?: ethers.JsonRpcProvider; // @deprecated
 }
