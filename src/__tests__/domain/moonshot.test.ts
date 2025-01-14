@@ -8,7 +8,6 @@ import {
   BASE_SEPOLIA_ADDRESS,
 } from '../../domain';
 import { ethers, JsonRpcProvider, Transaction, Wallet } from 'ethers';
-import { MoonshotFactory__factory } from '../../evm';
 import { ChainId } from '@heliofi/launchpad-common';
 import { applyNegativeSlippage } from '../../domain/utils/bipsToPercentageConverter';
 
