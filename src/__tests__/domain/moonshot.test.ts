@@ -8,7 +8,6 @@ import {
   BASE_SEPOLIA_ADDRESS,
 } from '../../domain';
 import { ethers, JsonRpcProvider, Transaction, Wallet } from 'ethers';
-import { ChainId } from '@heliofi/launchpad-common';
 import { applyNegativeSlippage } from '../../domain/utils/bipsToPercentageConverter';
 
 jest.setTimeout(60000);
@@ -68,7 +67,6 @@ describe('Moonshot', () => {
       ...buyTx,
       gasPrice: feeData.gasPrice,
       nonce: nonce,
-      chainId: ChainId.BASE_SEPOLIA,
       from: walletAddress,
     };
 
@@ -99,7 +97,7 @@ describe('Moonshot', () => {
       tokenAddress,
     });
 
-    await token.approve(BASE_SEPOLIA_ADDRESS, tokenAmount);
+    await token.approveForMoonshotSell(tokenAmount);
 
     const collateralAmountForTransaction =
       await token.getCollateralAmountByTokens({
@@ -127,7 +125,6 @@ describe('Moonshot', () => {
       ...sellTx,
       gasPrice: feeData.gasPrice,
       nonce: nonce,
-      chainId: ChainId.BASE_SEPOLIA,
       from: walletAddress,
     };
 
