@@ -14,6 +14,8 @@ import { getMoonshotFactoryAddress } from '../utils/getMoonshotFactoryAddress';
 export class Moonshot {
   private factory: MoonshotFactory;
 
+  private moonshotFactoryAddress: string;
+
   private signerWithProvider: Wallet;
 
   private apiAdapter: MoonshotApiAdapter;
@@ -25,6 +27,8 @@ export class Moonshot {
       options.env,
       options.network,
     );
+
+    this.moonshotFactoryAddress = moonshotFactoryAddress;
 
     this.factory = MoonshotFactory__factory.connect(
       moonshotFactoryAddress,
@@ -175,5 +179,13 @@ export class Moonshot {
 
   getFactory(): MoonshotFactory {
     return this.factory;
+  }
+
+  getSignerWithProvider(): Wallet {
+    return this.signerWithProvider;
+  }
+
+  getMoonshotFactoryAddress(): string {
+    return this.moonshotFactoryAddress;
   }
 }

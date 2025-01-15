@@ -3,9 +3,12 @@ import {
   Moonshot,
   MigrationDex,
   MintTokenCurveType,
+  FixedSide,
+  Token,
+  BASE_SEPOLIA_ADDRESS,
 } from '../../domain';
-import { JsonRpcProvider, Transaction, Wallet } from 'ethers';
-import { MoonshotFactory__factory } from '../../evm';
+import { ethers, JsonRpcProvider, Transaction, Wallet } from 'ethers';
+import { applyNegativeSlippage } from '../../domain/utils/bipsToPercentageConverter';
 
 jest.setTimeout(60000);
 
@@ -28,6 +31,117 @@ describe('Moonshot', () => {
     description: 'TEST_TOKEN',
     links: [{ url: 'https://x.com', label: 'x handle' }],
     banner: mockImg,
+  };
+
+  const buyExactIn = async (tokenAddress: string) => {
+    const token = await Token.create({
+      moonshot,
+      provider,
+      tokenAddress,
+    });
+
+    const collateralAmount = ethers.parseEther('0.001');
+
+    const tokenAmountForTransaction = await token.getTokenAmountByCollateral({
+      collateralAmount,
+      tradeDirection: 'BUY',
+    });
+
+    const slippageBps = 1000;
+
+    const buyTx = await token.prepareTx({
+      slippageBps,
+      tokenAmount: tokenAmountForTransaction,
+      collateralAmount: collateralAmount,
+      tradeDirection: 'BUY',
+      fixedSide: FixedSide.IN,
+    });
+
+    const walletAddress = await signer.getAddress();
+
+    const feeData = await provider.getFeeData();
+
+    const nonce = await provider.getTransactionCount(walletAddress, 'latest');
+
+    const enrichedBuyTx = {
+      ...buyTx,
+      gasPrice: feeData.gasPrice,
+      nonce: nonce,
+      from: walletAddress,
+    };
+
+    const buyTxGasLimit = await provider.estimateGas(enrichedBuyTx);
+
+    const buyTxResponse = await signer.sendTransaction({
+      ...buyTx,
+      gasLimit: buyTxGasLimit,
+    });
+
+    const buyTxReceipt = await buyTxResponse.wait();
+
+    expect(buyTxReceipt?.status).toBe(1);
+
+    const balance = await token.balanceOf(walletAddress);
+
+    expect(balance).toBeGreaterThanOrEqual(
+      applyNegativeSlippage(tokenAmountForTransaction, slippageBps),
+    );
+
+    return balance;
+  };
+
+  const sellExactIn = async (tokenAddress: string, tokenAmount: bigint) => {
+    const token = await Token.create({
+      moonshot,
+      provider,
+      tokenAddress,
+    });
+
+    await token.approveForMoonshotSell(tokenAmount);
+
+    const collateralAmountForTransaction =
+      await token.getCollateralAmountByTokens({
+        tokenAmount,
+        tradeDirection: 'BUY',
+      });
+
+    const slippageBps = 1000;
+
+    const sellTx = await token.prepareTx({
+      slippageBps,
+      tokenAmount,
+      collateralAmount: collateralAmountForTransaction,
+      tradeDirection: 'SELL',
+      fixedSide: FixedSide.IN,
+    });
+
+    const walletAddress = await signer.getAddress();
+
+    const feeData = await provider.getFeeData();
+
+    const nonce = await provider.getTransactionCount(walletAddress, 'latest');
+
+    const enrichedSellTx = {
+      ...sellTx,
+      gasPrice: feeData.gasPrice,
+      nonce: nonce,
+      from: walletAddress,
+    };
+
+    const sellTxGasLimit = await provider.estimateGas(enrichedSellTx);
+
+    const sellTxResponse = await signer.sendTransaction({
+      ...enrichedSellTx,
+      gasLimit: sellTxGasLimit,
+    });
+
+    const sellTxReceipt = await sellTxResponse.wait();
+
+    expect(sellTxReceipt?.status).toBe(1);
+
+    const balance = await token.balanceOf(walletAddress);
+
+    expect(balance).toBeGreaterThanOrEqual(0);
   };
 
   beforeAll(() => {
@@ -100,19 +214,16 @@ describe('Moonshot', () => {
       expect(res.status).toBe('SUCCESS');
       expect(res.txSignature).toBeDefined();
 
-      const contractInterface = MoonshotFactory__factory.createInterface();
-
-      const decodedResult = contractInterface.decodeFunctionResult(
-        'createMoonshotTokenAndBuy',
-        receipt.logs[3].data,
-      );
-
-      const createdTokenAddress = decodedResult[0];
+      const createdTokenAddress = receipt?.logs[0].address;
 
       const code = await provider.getCode(createdTokenAddress);
       const isContract = code !== '0x';
 
       expect(isContract).toBe(true);
+
+      const balance = await buyExactIn(createdTokenAddress);
+
+      await sellExactIn(createdTokenAddress, balance);
     }
   });
 });

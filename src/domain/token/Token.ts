@@ -1,6 +1,15 @@
-import { ContractTransaction } from 'ethers';
-import { MoonshotToken, MoonshotToken__factory } from '../../evm';
-import { CurveAccount } from '../curve/CurveAccount';
+import { ContractTransaction, ContractTransactionResponse } from 'ethers';
+import {
+  MoonshotToken,
+  MoonshotToken__factory,
+  getCurveAccount,
+} from '../../evm';
+import {
+  CurveAccount,
+  BaseConstantProductCurveV1Adapter,
+  CurveType,
+  AbstractCurveAdapter,
+} from '../curve';
 import {
   GetTokenAmountOptions,
   GetTokenAmountOptionsSync,
@@ -10,14 +19,10 @@ import {
   GetCollateralAmountOptionsSync,
 } from './GetCollateralAmountOptions';
 import { PrepareTxOptions } from './PrepareTxOptions';
-import { BaseConstantProductCurveV1Adapter } from '../curve/BaseConstantProductCurveAdapter';
-import { AbstractCurveAdapter } from '../curve/AbstractCurveAdapter';
-import { getCurveAccount } from '../../evm/utils/getCurveAccount';
 import { InitTokenOptions } from './InitTokenOptions';
 import { FixedSide } from './FixedSide';
 import { Moonshot } from '../moonshot';
-import { CurveType } from '../curve/CurveTypes';
-import { BPS_PRECISION_BIGINT } from '../constants';
+
 import {
   applyNegativeSlippage,
   applyPositiveSlippage,
@@ -30,6 +35,8 @@ export class Token {
 
   private factory: Moonshot;
 
+  private factoryAddress: string;
+
   private tokenCurveAdapter: AbstractCurveAdapter;
 
   private constructor(
@@ -37,17 +44,21 @@ export class Token {
     factory: Moonshot,
     tokenCurveAdapter: AbstractCurveAdapter,
     tokenAddress: string,
+    factoryAddress: string,
   ) {
     this.token = token;
     this.factory = factory;
     this.tokenCurveAdapter = tokenCurveAdapter;
     this.tokenAddress = tokenAddress;
+    this.factoryAddress = factoryAddress;
   }
 
   static async create(options: InitTokenOptions): Promise<Token> {
+    const getSignerWithProvider = options.moonshot.getSignerWithProvider();
+
     const token = MoonshotToken__factory.connect(
       options.tokenAddress,
-      options.provider,
+      getSignerWithProvider,
     );
     const tokenCurveAdapterType = await token.curveType();
 
@@ -61,11 +72,20 @@ export class Token {
       throw new Error('Unsupported curve type');
     }
 
+    const factoryAddress = await token.factory();
+
+    if (factoryAddress !== (await options.moonshot.getFactory().getAddress())) {
+      console.warn(
+        'Token created by old Moonshot Factory, that is no longer supported.',
+      );
+    }
+
     return new Token(
       token,
       options.moonshot,
       tokenCurveAdapter,
       await token.getAddress(),
+      factoryAddress,
     );
   }
 
@@ -171,6 +191,19 @@ export class Token {
       }
     }
 
-    return tx;
+    return {
+      ...tx,
+      to: this.factoryAddress,
+    };
+  }
+
+  async balanceOf(address: string): Promise<bigint> {
+    return this.token.balanceOf(address);
+  }
+
+  async approveForMoonshotSell(
+    amount: bigint,
+  ): Promise<ContractTransactionResponse> {
+    return this.token.approve(this.factoryAddress, amount);
   }
 }
