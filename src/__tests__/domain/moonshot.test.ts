@@ -1,11 +1,11 @@
 import {
   Environment,
-  Moonshot,
+  FixedSide,
   MigrationDex,
   MintTokenCurveType,
-  FixedSide,
+  Moonshot,
+  Network,
   Token,
-  BASE_SEPOLIA_ADDRESS,
 } from '../../domain';
 import { ethers, JsonRpcProvider, Transaction, Wallet } from 'ethers';
 import { applyNegativeSlippage } from '../../domain/utils/bipsToPercentageConverter';
@@ -148,6 +148,7 @@ describe('Moonshot', () => {
     moonshot = new Moonshot({
       signer,
       env: Environment.TESTNET,
+      network: Network.ABSTRACT,
     });
   });
 

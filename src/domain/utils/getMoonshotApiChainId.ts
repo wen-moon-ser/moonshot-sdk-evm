@@ -13,5 +13,13 @@ export const getMoonshotApiChainId = (
     return MoonshotApiChainId.BASE_TESTNET;
   }
 
+  if (network === Network.ABSTRACT) {
+    if (env === Environment.MAINNET) {
+      return MoonshotApiChainId.ABSTRACT_MAINNET;
+    }
+
+    return MoonshotApiChainId.ABSTRACT_TESTNET;
+  }
+
   throw new Error('Unsupported network, currently supporting BASE.');
 };
