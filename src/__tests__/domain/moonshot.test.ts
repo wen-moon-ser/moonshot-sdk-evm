@@ -148,7 +148,7 @@ describe('Moonshot', () => {
     moonshot = new Moonshot({
       signer,
       env: Environment.TESTNET,
-      network: Network.ABSTRACT,
+      network: Network.BASE,
     });
   });
 
@@ -190,7 +190,10 @@ describe('Moonshot', () => {
     const feeData = await provider.getFeeData();
 
     const tx = {
-      ...deserializedTransaction,
+      to: deserializedTransaction.to,
+      data: deserializedTransaction.data,
+      value: deserializedTransaction.value,
+      chainId: deserializedTransaction.chainId,
       gasPrice: feeData.gasPrice,
       from: walletAddress,
       nonce: await provider.getTransactionCount(walletAddress, 'latest'),
@@ -215,7 +218,7 @@ describe('Moonshot', () => {
       expect(res.status).toBe('SUCCESS');
       expect(res.txSignature).toBeDefined();
 
-      const createdTokenAddress = receipt?.logs[0].address;
+      const createdTokenAddress = receipt?.logs[2].address;
 
       const code = await provider.getCode(createdTokenAddress);
       const isContract = code !== '0x';

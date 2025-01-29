@@ -16,6 +16,21 @@ npm i @wen-moon-ser/moonshot-sdk-evm
 yarn add @wen-moon-ser/moonshot-sdk-evm
 ```
 
+### Initialization
+
+```typescript
+import {Environment, Moonshot, Network} from "@wen-moon-ser/moonshot-sdk-evm";
+
+const provider = new JsonRpcProvider(process.env.RPC_URL as string);
+const signer = new Wallet('private_key', provider);
+
+const moonshot = new Moonshot({
+  signer,
+  env: Environment.TESTNET,
+  network: Network.BASE, // Currently supporting Base and Abstract
+});
+```
+
 ### Buy example
 ```typescript
 import {ethers, JsonRpcProvider, Wallet} from "ethers";
@@ -191,7 +206,10 @@ const mintTx = async () => {
   const feeData = await provider.getFeeData();
 
   const tx = {
-    ...deserializedTransaction,
+    to: deserializedTransaction.to,
+    data: deserializedTransaction.data,
+    value: deserializedTransaction.value,
+    chainId: deserializedTransaction.chainId,
     gasPrice: feeData.gasPrice,
     from: walletAddress,
     nonce: await provider.getTransactionCount(walletAddress, 'latest'),
@@ -213,7 +231,7 @@ const mintTx = async () => {
       tokenId: prepMint.draftTokenId,
     });
 
-    const createdTokenAddress = receipt?.logs[0].address;
+    const createdTokenAddress = receipt?.logs[2].address;
 
     console.log(createdTokenAddress);
   }
