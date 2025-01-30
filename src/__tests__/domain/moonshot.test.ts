@@ -96,7 +96,9 @@ describe('Moonshot', () => {
       tokenAddress,
     });
 
-    await token.approveForMoonshotSell(tokenAmount);
+    const approveTx = await token.approveForMoonshotSell(tokenAmount);
+
+    await approveTx.wait();
 
     const collateralAmountForTransaction =
       await token.getCollateralAmountByTokens({
