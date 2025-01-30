@@ -27,7 +27,7 @@ const signer = new Wallet('private_key', provider);
 const moonshot = new Moonshot({
   signer,
   env: Environment.TESTNET,
-  network: Network.BASE, // Currently supporting Base and Abstract
+  network: Network.BASE, // Currently supporting Base and Abstract (Network.ABSTRACT)
 });
 ```
 
@@ -188,7 +188,7 @@ const mintTx = async () => {
     name: 'TEST_TOKEN',
     symbol: 'TEST_TOKEN',
     curveType: MintTokenCurveType.CONSTANT_PRODUCT_V1,
-    migrationDex: MigrationDex.UNISWAP,
+    migrationDex: MigrationDex.UNISWAP, // USE MigrationDex.ABSTRACTSWAP for abstract
     icon: mockImg,
     description: 'TEST_TOKEN',
     links: [{ url: 'https://x.com', label: 'x handle' }],
