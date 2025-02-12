@@ -6,9 +6,9 @@ import {
 } from '../../evm';
 import {
   AbstractCurveAdapter,
-  BaseConstantProductCurveV1Adapter,
   CurveAccount,
   CurveType,
+  EvmConstantProductCurveV1Adapter,
 } from '../curve';
 import {
   GetTokenAmountOptions,
@@ -27,7 +27,6 @@ import {
   applyNegativeSlippage,
   applyPositiveSlippage,
 } from '../utils/bipsToPercentageConverter';
-import { BeraConstantProductCurveV1 } from '@heliofi/launchpad-common';
 import { BeraConstantProductCurveV1Adapter } from '../curve/BeraConstantProductCurveAdapter';
 
 export class Token {
@@ -73,7 +72,7 @@ export class Token {
       if (network === Network.BERA) {
         tokenCurveAdapter = new BeraConstantProductCurveV1Adapter(token);
       } else {
-        tokenCurveAdapter = new BaseConstantProductCurveV1Adapter(token);
+        tokenCurveAdapter = new EvmConstantProductCurveV1Adapter(token);
       }
     } else {
       throw new Error('Unsupported curve type');

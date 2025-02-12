@@ -7,7 +7,7 @@ import {
 import { AbstractCurveAdapter } from './AbstractCurveAdapter';
 import { EvmConstantProductCurveV1 } from '@heliofi/launchpad-common';
 
-export class BaseConstantProductCurveV1Adapter extends AbstractCurveAdapter {
+export class EvmConstantProductCurveV1Adapter extends AbstractCurveAdapter {
   private readonly platformFeeBps: number = 100;
 
   private readonly curve = new EvmConstantProductCurveV1();
