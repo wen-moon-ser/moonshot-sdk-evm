@@ -24,7 +24,7 @@ describe('Moonshot', () => {
   const basicTokenMintData = {
     name: 'TEST_TOKEN',
     symbol: 'TEST_TOKEN',
-    migrationDex: MigrationDex.KODIAK,
+    migrationDex: MigrationDex.UNISWAP,
     icon: mockImg,
     description: 'TEST_TOKEN',
     links: [{ url: 'https://x.com', label: 'x handle' }],
@@ -146,7 +146,7 @@ describe('Moonshot', () => {
     moonshot = new Moonshot({
       signer,
       env: Environment.TESTNET,
-      network: Network.BERA,
+      network: Network.BASE,
     });
   });
 
