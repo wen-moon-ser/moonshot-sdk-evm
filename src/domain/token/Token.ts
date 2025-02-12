@@ -1,14 +1,14 @@
 import { ContractTransaction, ContractTransactionResponse } from 'ethers';
 import {
+  getCurveAccount,
   MoonshotToken,
   MoonshotToken__factory,
-  getCurveAccount,
 } from '../../evm';
 import {
-  CurveAccount,
-  BaseConstantProductCurveV1Adapter,
-  CurveType,
   AbstractCurveAdapter,
+  BaseConstantProductCurveV1Adapter,
+  CurveAccount,
+  CurveType,
 } from '../curve';
 import {
   GetTokenAmountOptions,
@@ -21,12 +21,14 @@ import {
 import { PrepareTxOptions } from './PrepareTxOptions';
 import { InitTokenOptions } from './InitTokenOptions';
 import { FixedSide } from './FixedSide';
-import { Moonshot } from '../moonshot';
+import { Moonshot, Network } from '../moonshot';
 
 import {
   applyNegativeSlippage,
   applyPositiveSlippage,
 } from '../utils/bipsToPercentageConverter';
+import { BeraConstantProductCurveV1 } from '@heliofi/launchpad-common';
+import { BeraConstantProductCurveV1Adapter } from '../curve/BeraConstantProductCurveAdapter';
 
 export class Token {
   private tokenAddress: string;
@@ -67,7 +69,12 @@ export class Token {
       tokenCurveAdapterType.toString() ==
       CurveType.ConstantProductCurveV1.toString()
     ) {
-      tokenCurveAdapter = new BaseConstantProductCurveV1Adapter(token);
+      const network = options.moonshot.getNetwork();
+      if (network === Network.BERA) {
+        tokenCurveAdapter = new BeraConstantProductCurveV1Adapter(token);
+      } else {
+        tokenCurveAdapter = new BaseConstantProductCurveV1Adapter(token);
+      }
     } else {
       throw new Error('Unsupported curve type');
     }

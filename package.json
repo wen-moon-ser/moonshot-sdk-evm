@@ -31,7 +31,7 @@
     "typescript": "^5.5.2"
   },
   "dependencies": {
-    "@heliofi/launchpad-common": "^1.3.6",
+    "@heliofi/launchpad-common": "^1.5.7",
     "axios": "^1.7.7",
     "dotenv": "^16.4.7",
     "ethers": "^6.13.3",

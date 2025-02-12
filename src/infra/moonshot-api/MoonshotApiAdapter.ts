@@ -5,6 +5,7 @@ import { MintTokenSubmitV1Request } from './MintTokenSubmitV1Request';
 import { MintTokenSubmitV1Response } from './MintTokenSubmitV1Response';
 import { ApiClient } from '../http';
 import { getMoonshotApiChainId } from '../../domain/utils/getMoonshotApiChainId';
+import { getMintTokenCurveType } from '../../domain/utils/getMintTokenCurveType';
 
 export class MoonshotApiAdapter {
   private apiClient: ApiClient;
@@ -25,14 +26,16 @@ export class MoonshotApiAdapter {
   }
 
   async prepareMint(
-    prepareBuyDto: Omit<MintTokenPrepareV1Request, 'chainId'>,
+    prepareBuyDto: Omit<MintTokenPrepareV1Request, 'chainId' | 'curveType'>,
   ): Promise<MintTokenPrepareV1Response> {
     const chainId = getMoonshotApiChainId(this.env, this.network);
+    const curveType = getMintTokenCurveType(this.network);
 
     return this.apiClient.publicRequest(`/tokens/v1`, {
       method: 'POST',
       data: {
         ...prepareBuyDto,
+        curveType,
         chainId,
       },
     });

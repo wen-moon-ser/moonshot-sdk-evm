@@ -21,5 +21,15 @@ export const getMoonshotApiChainId = (
     return MoonshotApiChainId.ABSTRACT_TESTNET;
   }
 
-  throw new Error('Unsupported network, currently supporting BASE.');
+  if (network === Network.BERA) {
+    if (env === Environment.MAINNET) {
+      return MoonshotApiChainId.BERA_MAINNET;
+    }
+
+    return MoonshotApiChainId.BERA_TESTNET;
+  }
+
+  throw new Error(
+    'Unsupported network, currently supporting Base, Abstract and Bera.',
+  );
 };

@@ -24,7 +24,7 @@ export interface PrepareMintTxOptions {
    * Currently only CONSTANT_PRODUCT_V1 is supported
    * LINEAR_V1 is a legacy curve
    */
-  curveType: MintTokenCurveType;
+  curveType?: MintTokenCurveType;
 
   /**
    * DEX to use for token migration
