@@ -1,4 +1,6 @@
 import {
+  ABSTRACT_MAINNET_ADDRESS,
+  ABSTRACT_TESTNET_ADDRESS,
   BASE_MAINNET_ADDRESS,
   BASE_SEPOLIA_ADDRESS,
   Environment,
@@ -15,6 +17,14 @@ export const getMoonshotFactoryAddress = (
     }
 
     return BASE_SEPOLIA_ADDRESS;
+  }
+
+  if (network === Network.ABSTRACT) {
+    if (env === Environment.MAINNET) {
+      return ABSTRACT_MAINNET_ADDRESS;
+    }
+
+    return ABSTRACT_TESTNET_ADDRESS;
   }
 
   throw new Error('Unsupported network, currently supporting BASE.');
