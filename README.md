@@ -180,6 +180,7 @@ const mintTx = async () => {
   const moonshot = new Moonshot({
     signer,
     env: Environment.TESTNET,
+    network: Network.BASE, // Network.ABSTRACT for abstract, and Network.KODIAK for BERA
   });
 
   const mockImg = '...';
@@ -187,8 +188,7 @@ const mintTx = async () => {
   const prepMint = await moonshot.prepareMintTx({
     name: 'TEST_TOKEN',
     symbol: 'TEST_TOKEN',
-    curveType: MintTokenCurveType.CONSTANT_PRODUCT_V1,
-    migrationDex: MigrationDex.UNISWAP, // USE MigrationDex.ABSTRACTSWAP for abstract
+    migrationDex: MigrationDex.UNISWAP, // USE MigrationDex.ABSTRACTSWAP for abstract, and MigrationDex.KODIAK for BERA
     icon: mockImg,
     description: 'TEST_TOKEN',
     links: [{ url: 'https://x.com', label: 'x handle' }],

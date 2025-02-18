@@ -23,8 +23,9 @@ export interface PrepareMintTxOptions {
    * Type of curve to use for token pricing
    * Currently only CONSTANT_PRODUCT_V1 is supported
    * LINEAR_V1 is a legacy curve
+   * @deprecated No longer needed, left it so it won't be breaking change
    */
-  curveType: MintTokenCurveType;
+  curveType?: MintTokenCurveType;
 
   /**
    * DEX to use for token migration

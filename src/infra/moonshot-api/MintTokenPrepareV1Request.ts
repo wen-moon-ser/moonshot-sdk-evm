@@ -31,7 +31,7 @@ export interface MintTokenPrepareV1Request {
    * Type of curve to use for token pricing
    * Currently only CONSTANT_PRODUCT_V1 is supported
    */
-  curveType: MintTokenCurveType;
+  curveType?: MintTokenCurveType;
 
   /**
    * DEX to use for token migration
