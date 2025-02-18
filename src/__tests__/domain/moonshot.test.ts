@@ -2,7 +2,6 @@ import {
   Environment,
   FixedSide,
   MigrationDex,
-  MintTokenCurveType,
   Moonshot,
   Network,
   Token,
@@ -25,7 +24,6 @@ describe('Moonshot', () => {
   const basicTokenMintData = {
     name: 'TEST_TOKEN',
     symbol: 'TEST_TOKEN',
-    curveType: MintTokenCurveType.CONSTANT_PRODUCT_V1,
     migrationDex: MigrationDex.UNISWAP,
     icon: mockImg,
     description: 'TEST_TOKEN',
@@ -161,7 +159,7 @@ describe('Moonshot', () => {
     const prepMint = await moonshot.prepareMintTx({
       ...basicTokenMintData,
       creator: await signer.getAddress(),
-      tokenAmount: '10000000000',
+      tokenAmount: '163943390006858329570895',
     });
 
     expect(prepMint.token).toBeDefined();
@@ -183,7 +181,7 @@ describe('Moonshot', () => {
     const prepMint = await moonshot.prepareMintTx({
       ...basicTokenMintData,
       creator: await signer.getAddress(),
-      tokenAmount: '10000000000000',
+      tokenAmount: '163943390006858329570895',
     });
 
     const deserializedTransaction = Transaction.from(

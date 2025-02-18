@@ -1,6 +1,9 @@
-import { MoonshotToken__factory, MoonshotFactory__factory } from '../../evm';
+import {
+  MoonshotFactory,
+  MoonshotFactory__factory,
+  MoonshotToken__factory,
+} from '../../evm';
 import { BigNumberish, ethers, Wallet } from 'ethers';
-import { MoonshotFactory } from '../../evm';
 import { FixedSide } from '../token';
 import { AmountAndFee } from './AmountAndFee';
 import { MoonshotInitOptions } from './MoonshotInitOptions';
@@ -10,6 +13,7 @@ import { MoonshotApiAdapter } from '../../infra/moonshot-api';
 import { SubmitMintTxOptions } from '../../infra/moonshot-api/SubmitMintTxOptions';
 import { SubmitMintTxResponse } from '../../infra/moonshot-api/SubmitMintTxResponse';
 import { getMoonshotFactoryAddress } from '../utils/getMoonshotFactoryAddress';
+import { Network } from './Network';
 
 export class Moonshot {
   private factory: MoonshotFactory;
@@ -20,6 +24,8 @@ export class Moonshot {
 
   private apiAdapter: MoonshotApiAdapter;
 
+  private network: Network;
+
   constructor(options: MoonshotInitOptions) {
     this.signerWithProvider = options.signer;
 
@@ -29,6 +35,7 @@ export class Moonshot {
     );
 
     this.moonshotFactoryAddress = moonshotFactoryAddress;
+    this.network = options.network || Network.BASE;
 
     this.factory = MoonshotFactory__factory.connect(
       moonshotFactoryAddress,
@@ -187,5 +194,9 @@ export class Moonshot {
 
   getMoonshotFactoryAddress(): string {
     return this.moonshotFactoryAddress;
+  }
+
+  getNetwork(): Network {
+    return this.network;
   }
 }

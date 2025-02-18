@@ -46,7 +46,9 @@ const validateStatus = async (response: AxiosResponse): Promise<void> => {
   console.error(response.data);
   try {
     console.error(JSON.stringify(response.data));
-  } catch (e) {}
+  } catch (e) {
+    console.log(e);
+  }
   console.error(response.data.message);
   throw new ResponseError(
     response,
