@@ -31,7 +31,7 @@ describe('Moonshot', () => {
     banner: mockImg,
   };
 
-  const buyExactIn = async (tokenAddress: string) => {
+  const buyExactIn = async (tokenAddress: string): Promise<bigint> => {
     const token = await Token.create({
       moonshot,
       provider,
@@ -88,14 +88,19 @@ describe('Moonshot', () => {
     return balance;
   };
 
-  const sellExactIn = async (tokenAddress: string, tokenAmount: bigint) => {
+  const sellExactIn = async (
+    tokenAddress: string,
+    tokenAmount: bigint,
+  ): Promise<void> => {
     const token = await Token.create({
       moonshot,
       provider,
       tokenAddress,
     });
 
-    await token.approveForMoonshotSell(tokenAmount);
+    const approveTx = await token.approveForMoonshotSell(tokenAmount);
+
+    await approveTx.wait();
 
     const collateralAmountForTransaction =
       await token.getCollateralAmountByTokens({

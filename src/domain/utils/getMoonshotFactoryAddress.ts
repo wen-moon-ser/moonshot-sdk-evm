@@ -12,7 +12,7 @@ import {
 export const getMoonshotFactoryAddress = (
   env: Environment,
   network: Network = Network.BASE,
-) => {
+): string => {
   if (network === Network.BASE) {
     if (env === Environment.MAINNET) {
       return BASE_MAINNET_ADDRESS;
